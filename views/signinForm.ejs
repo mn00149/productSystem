@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <form action="/users/" method="post" class="form" id="form">
+            <h2>Sign Up</h2>
+            <hr/>
+            <div class="input-form">
+
+            <div class="input-form">
+                <label for="username">사번</label>
+                <input name="employeeNumber" type='number' id="employeeNumber" placeholder="사번을 입력하세요">
+                <input type="button" value="Username Check" class="btn" >
+                <small>Error Message</small>
+            </div>
+
+            <div class="input-form">
+                <label for="password">Password</label>
+                <input name="password" type="password" id="password" placeholder="Enter Password">
+                <small>Error Message</small>
+            </div>
+            <!-- <button>Register</button> -->
+            <button type="button" onclick="location.href='/signupForm';"> 계정생성 </button>
+        </form>
+        <button type="button" id="signinBtn">Sign In</button>
+    </div>
+</body>
+<script>
+    $("#signinBtn").click(function () {    // parameter가 있는 형태
+    let password = $('#password').val();
+    let employeeNumber = $('#employeeNumber').val();
+
+    let data = {password, employeeNumber}
+    console.log(data)    
+    $.ajax({
+
+        type: "post",
+        url: "/users/signin",
+        data: data,
+        dataType: "json",
+        success: function(data) {
+            alert("로그인 성공")
+        },
+        error: function () {
+            alert(data.message)
+        }
+    });
+});
+
+</script>
+</html>

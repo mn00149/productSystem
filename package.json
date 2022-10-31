@@ -1,0 +1,29 @@
+{
+  "name": "6-express",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "express-validator": "^6.14.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^4.11.0",
+    "mongoose": "^6.6.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}

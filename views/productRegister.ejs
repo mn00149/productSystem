@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+
+</head>
+<body>
+    <%- include('header') -%>
+    <container>
+        <div class="register-form">
+            <div class="form-control">
+                <h3>물품 등록</h3>
+                <button class="reset-btn"><img src="../public/image/reset-btn.svg" alt="#"></button>
+            </div>
+            <div class="form-control">
+                <p>대분류:</p>
+                <input type="text" class="main-category-input">
+                <select name="" id="select-main">
+                    <option value="0">직접입력</option>
+                </select>
+            </div>
+            <div class="form-control">
+                <p>소분류:</p>
+                <input type="text" class="sub-category-input">
+                <select name="" id="select-sub">
+                    <option value="0">직접입력</option>
+                </select>
+            </div>
+            <div class="form-control">
+                <p>물품명</p>
+                <input id="product-name" type="text">
+            </div>
+            <div class="form-control">
+                <p>대여가능 여부</p>
+                가능: <input type="checkbox" name="rent-avl" value="1" id="rent-true" checked>
+                불가: <input type="checkbox" name="rent-avl" value="0" id="">
+            </div>
+            <div class="form-control">
+                <p>반환 여부</p>
+                필요: <input type="checkbox" name="return-avl" value="1" id="return-true" checked>
+                불필요: <input type="checkbox" name="return-avl" value="0" id="">
+            </div>
+            <div class="form-control">
+                <p>제품코드:</p>
+                <input id="product-code" type="text">
+            </div>
+            <div class="form-control">
+                <p>수량:</p>
+                <input id="quantity" type="number">
+            </div>
+            <div class="form-control">
+                <button>엑셀</button>
+                <button type="button" id="register-btn">등록</button>
+                <button>취소</button>
+            </div>
+        </div>
+        
+    </container>
+    <script type="module" src="../public/js/productRegister.js"></script>
+
+</body>
+</html>
