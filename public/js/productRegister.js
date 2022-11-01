@@ -4,6 +4,8 @@ let mainCategory = $('#select-main')
 let mainCategoryInput = $('.main-category-input')
 let subCategory = $('#select-sub')
 let subCategoryInput = $('.sub-category-input')
+let productCodeInput = $('#product-code')
+let productNameInput = $('#product-name')
 
 $(document).ready(function () {
     $.get('/category').done((res) => {
@@ -73,10 +75,10 @@ $('input[type="checkbox"][name="return-avl"]').click(function () {
 $('#register-btn').click(function () {
     let mainCategory = mainCategoryInput.val()
     let subCategory = subCategoryInput.val()
-    let productName = $('#product-name').val()
+    let productName = productNameInput.val()
     let rentalAvailability = $("input:checkbox[name='rent-avl']:checked").val()
     let returnAvailability = $("input:checkbox[name='return-avl']:checked").val()
-    let productCode = $('#product-code').val()
+    let productCode = productCodeInput.val()
     let quantity = Number($('#quantity').val())
 
     let data = { mainCategory, subCategory, productName, returnAvailability, rentalAvailability, productCode, quantity }
@@ -91,11 +93,16 @@ $('#register-btn').click(function () {
         })
 })
 
+$('.reset-btn').click(function(){
+    reset([mainCategoryInput, subCategoryInput, productCodeInput, productNameInput ])
+})
+
 function reset(arr) {
     for (let i = 0; i < arr.length; i++) {
         arr[i].val('');
     };
     $('input[type="checkbox"][name="rent-avl"]').prop('checked', false);
+    $('input[type="checkbox"][name="return-avl"]').prop('checked', false);
     $('#rent-true').prop('checked', true)
     $('#quantity').val('1')
     $('#return-true').prop('checked', true)

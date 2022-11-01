@@ -1,0 +1,65 @@
+* {
+    box-sizing: border-box;
+}
+
+img{
+    width: 20px;
+    height: 20px;
+}
+
+.container{
+    width: 100%;
+    background-color: rgb(0, 162, 255);
+    padding-bottom: 20px;
+}
+
+
+
+h3{
+    text-align: center;
+    
+}
+.product-list{
+    display: flex;
+    justify-content: center;
+}
+
+table {
+    background-color: aliceblue;
+    border-collapse: collapse;
+    border-radius: 5px;
+    width: 80%;
+}
+
+.product-table th, tr{
+    padding: 15px;
+    border-bottom: 1px solid rgb(206, 201, 201);
+    
+    
+}
+
+tbody td{
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.search-sorting{
+    width: 90%;
+    display: flex;
+    justify-content: flex-end;
+    align-items:baseline;
+
+}
+
+.search-input{
+    height: 100%;
+}
+
+.filter{
+    margin-top: 30px;
+    width: 90%;
+    display: flex;
+    justify-content: flex-end;
+
+}

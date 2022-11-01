@@ -38,6 +38,19 @@ router.post('/register', async (req, res) => {
 
   res.status(201).json({ message: "물품등록 성공" });
 });
+// 물품 관리 페이지 렌더링
+router.get('/manage', async (req, res) => {
+  res.render('productManage')
+})
+
+//물품 리스트 불러오는 api
+router.get('/getAll', async (req, res) => {
+  const products = await productRepository.getAll()
+  if(!products){return res.status(401).json({message: '현제 등록된 물품이 없습니다'})}
+  return res.status(201).json(products)
+
+})
+
 // 물품 대여 api
 router.post('/rent',isAuth, async (req, res) => {
   const user = req.user

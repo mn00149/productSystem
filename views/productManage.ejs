@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../public/css/productmanage.css" />
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+
+<body>
+    <%- include('header') -%>
+        <div class="container">
+            
+            <div class="search-sorting">
+                <div class="search">
+                    <img src="../public/image/search_icon.png" alt="">
+                     <input class="search-input" type="text">
+                </div>
+                <select name="sorting" id="sorting">
+                    <option>정렬</option>
+                    <option value="1">물품명 오름차순</option>
+                    <option value="2">물품명 내림차순</option>
+                    <option value="3">등록일 오름차순</option>
+                    <option value="4">등록일 내림차순</option>
+                </select>
+            </div>
+            <div class="filter">
+                <img src="../public/image/3844440_filter_filters_icon.png" alt="">
+                <select name="" id="select-main" >
+                    <option value="0">대분류</option>
+                </select>
+                <select name="" id="select-sub">
+                    <option value="0">소분류</option>
+                </select>
+            </div>
+            <h3>물품 관리</h3>
+            <div class="product-list">
+                <table class="product-table">
+                    <thead>    
+                        <tr>
+                            <th>대분류</th>
+                            <th>소분류</th>
+                            <th>물품</th>
+                            <th>수량</th>
+                            <th>정보</th>
+                            <th>등록일(수정일)</th>
+                            <th>선택</th>
+                        </tr>
+                    </thead>
+                    <tbody id="product-tbody">
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <script type="module" src="../public/js/productManage.js"></script>
+</body>
+
+</html>
