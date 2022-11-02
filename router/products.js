@@ -2,8 +2,8 @@ import express from 'express';
 import * as productRepository from '../models/Product.js';
 import * as categoryRepository from '../models/Category.js';
 import * as userRepository from '../models/User.js';
-
 import { isAuth } from '../middleware/auth.js';
+import * as util from '../middleware/util.js'
 
 const router = express.Router();
 
@@ -17,6 +17,7 @@ router.get('/register', async(req, res) => {
 //물품등록 api
 router.post('/register', async (req, res) => {
   const { mainCategory, subCategory, productName, returnAvailability, rentalAvailability, productCode, quantity } = req.body
+  const registerDate = util.getDate()
   // 프런트단에서도 대분류 소분류 기본값주도록 설정 validation 필요
   if (!mainCategory) { return res.status(401).json({ message: "Main Category reqiured" }) }
   if (!subCategory) { return res.status(401).json({ message: "Sub Category reqiured" }) }
@@ -33,11 +34,12 @@ router.post('/register', async (req, res) => {
   if (findProduct) {
     return res.status(409).json({ message: productCode + ` already exists` })
   }
-  const newProduct = { productName, returnAvailability, rentalAvailability, productCode, quantity, category }
+  const newProduct = { productName, returnAvailability, rentalAvailability, productCode, quantity, category, registerDate }
   await productRepository.createProduct(newProduct)
 
   res.status(201).json({ message: "물품등록 성공" });
 });
+
 // 물품 관리 페이지 렌더링
 router.get('/manage', async (req, res) => {
   res.render('productManage')
@@ -46,6 +48,7 @@ router.get('/manage', async (req, res) => {
 //물품 리스트 불러오는 api
 router.get('/getAll', async (req, res) => {
   const products = await productRepository.getAll()
+
   if(!products){return res.status(401).json({message: '현제 등록된 물품이 없습니다'})}
   return res.status(201).json(products)
 
@@ -79,6 +82,24 @@ router.post('/rent',isAuth, async (req, res) => {
   return res.status(200).json({ message: '대여 성공' })
 
 })
+
+//물품명으로 물품 검색
+router.get('/search/productName/:productName', async (req, res) => {
+
+  const productName = req.params.productName
+  const products = await productRepository.getAll()
+  const searchProducts = products.filter((product) => product.productName.includes(productName))
+  return res.status(200).json(searchProducts)
+})
+
+//대여자로 물품검색
+router.get('/search/username/:username', async (req, res) => {
+
+  const username = req.params.username
+  const users = await userRepository.getAll()
+  const searchUsers = users.filter((user) => user.username.includes(username))
+  return res.status(200).json(searchUsers)
+})
 // 물품반납 API
 router.put('/:productCode', isAuth, async (req, res) => {
   const {productCode} = req.params
@@ -103,13 +124,14 @@ router.put('/:productCode', isAuth, async (req, res) => {
   
   await productRepository.updateByProduct(product)
   await userRepository.updateUserbyUser(user)
-  
-
   res.status(201).send('반닙성공');
 });
-
-router.delete('/:id', async (req, res) => {
-  res.status(201).send('DELETE: /products/:id');
+//물품 삭제 api
+router.post('/delete', async (req, res) => {
+  const {productCode} =req.body
+  console.log(productCode)
+  await productRepository.deleteByProductCode(productCode)
+  res.status(201).json({message:'삭제되었습니다'});
 });
 
 export default router;

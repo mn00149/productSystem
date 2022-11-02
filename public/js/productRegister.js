@@ -72,6 +72,7 @@ $('input[type="checkbox"][name="return-avl"]').click(function () {
 
 });
 
+//물품등록버튼
 $('#register-btn').click(function () {
     let mainCategory = mainCategoryInput.val()
     let subCategory = subCategoryInput.val()
@@ -88,7 +89,7 @@ $('#register-btn').click(function () {
 
     })
         .fail((res) => {
-            alert(res.responseJSON)
+            alert(res.responseJSON.message)
             console.log(res)
         })
 })

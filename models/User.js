@@ -11,8 +11,7 @@ const userSchema = new Mongoose.Schema({
   right: { type: String, default: 'open' }, //권한 (등록, 열람, 편집, 대여)
   lending: {type: Array, default: []},
   lendingList: {type: Array, default: []} // 대여한 물품코드를 저장 한 뒤 대여시 api 에서 확인 하여 있으면 대여 못하게 막기
-
-});
+},{timestamps:true});
 
 useVirtualId(userSchema);
 const User = Mongoose.model('User', userSchema);
@@ -39,4 +38,8 @@ export async function findByEmployeeNumber(employeeNumber) {
 
 export async function updateUserbyUser(user) {
   return new User(user).save().then((data) => data.id);
+}
+
+export async function getAll() {
+  return User.find({});
 }

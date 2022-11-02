@@ -1,60 +1,70 @@
 let category = []
 let productsList = []
+let filterdeProductList = []
+let filterdeSubProductList = []
+let subOptions = {}
+let searchBtn = $('#search-btn')
+let searchInput = $('#search-input')
 let tbody = $('#product-tbody')
 let mainCategory = $('#select-main')
 let subCategory = $('#select-sub')
-let subOptions = {}
-function availability(i){
-    if(i==1)return "O"
+
+function availability(i) {
+    if (i == 1) return "O"
     else return "X"
 }
 
-function generateTbodyInf(productList){
-    let product = ""        
-        for (let i = 0; i < productsList.length; i++) {
-            let total = productsList[i].quantity + productsList[i].lended.length
-            let lending = productsList[i].lended.length
-            let left = total -lending
-            product += `                        
-        <tr>
-            <td>${productsList[i].category.mainCategory}</td>
-            <td>${productsList[i].category.subCategory}</td>
-            <td>
-                <p>물품명:${productsList[i].productName}</p>
-                <p>코드:${productsList[i].productCode}</p>
-            </td>
-            <td>
-                <p>총량:${total}</p>
-                <p>대여중:${lending}</p>
-                <p>대여가능:${left}</p>
-            </td>
-            <td>
-                <p>대여가능 여부:${availability(productsList[i].rentalAvailability)}</p>
-                <p>반납필요 여부:${availability(productsList[i].returnAvailability)}</p>
-            </td>
-            <td>등록일</td>
-            <td>
-                <div class="select-btn">
-                    <button type="button">대여자 목록</button>
-                    <button type="button">삭제</button>
-                    <button type="button">수정</button>
-                <div>
-            </td>
-        </tr>`;
-            
-        }
+// tbody에 들어갈 테이블 생성 함수
+function generateTbodyInf(productsList) {
+    let product = ""
+    for (let i = 0; i < productsList.length; i++) {
+        let total = productsList[i].quantity + productsList[i].lended.length
+        let lending = productsList[i].lended.length
+        let left = total - lending
+        product += `                        
+                    <tr>
+                        <td>${productsList[i].category.mainCategory}</td>
+                        <td>${productsList[i].category.subCategory}</td>
+                        <td>
+                            <p>물품명:${productsList[i].productName}</p>
+                            <p>코드:${productsList[i].productCode}</p>
+                        </td>
+                        <td>
+                            <p>총량:${total}</p>
+                            <p>대여중:${lending}</p>
+                            <p>대여가능:${left}</p>
+                        </td>
+                        <td>
+                            <p>대여가능 여부:${availability(productsList[i].rentalAvailability)}</p>
+                            <p>반납필요 여부:${availability(productsList[i].returnAvailability)}</p>
+                        </td>
+                        <td>${productsList[i].registerDate}</td>
+                        <td>
+                            <div class="select-btn">
+                                <button value="${productsList[i].productCode}">대여자 목록</button>
+                                ${
+                                    productsList[i].rentalAvailability ? "<button type=button value="+productsList[i].productCode+">대여</button>" : ""
+                                }
+                                <button id="delete-btn" type="button" value="${productsList[i].productCode}">삭제</button>
+                                <button type="button" value="${productsList[i].productCode}">수정</button>
+                            <div>
+                        </td>
+                    </tr>
+                    `;
+
+    }
     return product
 }
-
+// 페이지 로딩시 카테고리와 물품의 모든 정보를 가져옴
 $(document).ready(function () {
     $.get('/products/getAll')
-    .done((res) => {
-        productsList = res
-        tbody.empty()
-        let tbodyInf = generateTbodyInf(productsList)        
-        tbody.append(tbodyInf)
-    })
-    .fail((res) => {alert(res.responseJSON)})
+        .done((res) => {
+            productsList = res
+            tbody.empty()
+            let  tbodyInf = generateTbodyInf(productsList)
+            tbody.append(tbodyInf)
+        })
+        .fail((res) => { alert(res.responseJSON) })
 
     $.get('/category').done((res) => {
         category = res
@@ -67,38 +77,163 @@ $(document).ready(function () {
         alert("서버에 오류가 생겼습니다 잠시후 다시 시도해주시길 바랍니다")
     })
 })
-
+//대분류가 바뀌때
 mainCategory.change(function () {
     let currentMain = $(this).val()
+    let tbodyInf = ''
+    if (currentMain == 0) {
+        tbodyInf = generateTbodyInf(productsList)
+    } else {
+        filterdeProductList = productsList.filter((product) => { return product.category.mainCategory == currentMain })
+        tbodyInf = generateTbodyInf(filterdeProductList)
+    }
+    tbody.empty()
+    tbody.append(tbodyInf)
     subCategory.empty();
-    subCategory.append("<option>소분류</option>")
+    subCategory.append(`<option value="0">소분류</option>`)
     let subOptionList = subOptions[currentMain]
     if (subOptionList) {
         for (let i = 0; i < subOptionList.length; i++) {
             let option = "<option value=" + subOptionList[i] + ">" + subOptionList[i] + "</option>"
             subCategory.append(option)
         }
-    
     }
-
-    if (currentMain == '0') {
-        mainCategoryInput.val('')
-
-    } else { mainCategoryInput.val(currentMain) }
-    subCategoryInput.val('')
 })
-
-$('#sorting').change(function(){
+//소분류가 변경될때
+subCategory.change(function () {
+    let currentSub = $(this).val()
+    let tbodyInf = ''
+    console.log(currentSub)
+    if (currentSub == 0) {
+        tbodyInf = generateTbodyInf(filterdeProductList)
+    } else {
+        filterdeSubProductList = filterdeProductList.filter((product) => product.category.subCategory == currentSub)
+        tbodyInf = generateTbodyInf(filterdeSubProductList)
+    }
     tbody.empty()
-    console.log($(this).val())
-    if($(this).val() == 1){
-        let productListNameAsc = productsList.sort((a, b) => a.productName.toLowerCase() < b.productName.toLowerCase() ? -1 : 1)
-        let tbodyInf = generateTbodyInf(productListNameAsc)
-        tbody.append(tbodyInf)
-    }
-    if($(this).val() == 2){
-        let productListNameAsc = productsList.sort((a, b) => b.productName.toLowerCase() < a.productName.toLowerCase() ? -1 : 1)
-        let tbodyInf = generateTbodyInf(productListNameAsc)
-        tbody.append(tbodyInf)
-    }
+    tbody.append(tbodyInf)
 })
+//정려이 바뀔때
+$('#sorting').change(function () {
+    tbody.empty()
+    let sortoption = $(this).val()
+    let productListNameAsc = []
+    let tbodyInf = ''
+    if (mainCategory.val() == 0 && subCategory.val() == 0) {//대분류 소분류 선택안함
+        if (sortoption == 1) {
+            productListNameAsc = productsList.sort((a, b) => a.productName.toLowerCase() < b.productName.toLowerCase() ? -1 : 1)
+            tbodyInf = generateTbodyInf(productListNameAsc)
+        }
+        if (sortoption == 2) {
+            productListNameAsc = productsList.sort((a, b) => b.productName.toLowerCase() < a.productName.toLowerCase() ? -1 : 1)
+            tbodyInf = generateTbodyInf(productListNameAsc)
+        }
+        if (sortoption == 3) {
+            productListNameAsc = productsList.sort((a, b) => new Date(a.registerDate) < new Date(b.registerDate) ? -1 : 1)
+            tbodyInf = generateTbodyInf(productListNameAsc)
+        }
+        if (sortoption == 4) {
+            productListNameAsc = productsList.sort((a, b) => new Date(b.registerDate) < new Date(a.registerDate) ? -1 : 1)
+            tbodyInf = generateTbodyInf(productListNameAsc)
+        }
+        else {
+            tbodyInf = generateTbodyInf(productsList)
+        }
+    }
+    if (mainCategory.val() != 0 && subCategory.val() == 0) {//대분류 선택 소분류 선택 안함
+        if (sortoption == 1) {
+            productListNameAsc = filterdeProductList.sort((a, b) => a.productName.toLowerCase() < b.productName.toLowerCase() ? -1 : 1)
+            tbodyInf = generateTbodyInf(productListNameAsc)
+
+        }
+        if (sortoption == 2) {
+            tbody.empty()
+            productListNameAsc = filterdeProductList.sort((a, b) => b.productName.toLowerCase() < a.productName.toLowerCase() ? -1 : 1)
+            tbodyInf = generateTbodyInf(productListNameAsc)
+
+        }
+        if (sortoption == 3) {
+            productListNameAsc = filterdeProductList.sort((a, b) => new Date(a.registerDate) < new Date(b.registerDate) ? -1 : 1)
+            tbodyInf = generateTbodyInf(productListNameAsc)
+        }
+        if (sortoption == 4) {
+            productListNameAsc = filterdeProductList.sort((a, b) => new Date(b.registerDate) < new Date(a.registerDate) ? -1 : 1)
+            tbodyInf = generateTbodyInf(productListNameAsc)
+        }
+        else {
+            tbodyInf = generateTbodyInf(filterdeProductList)
+        }
+    }
+
+    if (mainCategory.val() != 0 && subCategory.val() != 0) {//대분류 선택 소분류 선택
+        if (sortoption == 1) {
+            productListNameAsc = filterdeSubProductList.sort((a, b) => a.productName.toLowerCase() < b.productName.toLowerCase() ? -1 : 1)
+            tbodyInf = generateTbodyInf(productListNameAsc)
+
+        }
+        if (sortoption == 2) {
+            tbody.empty()
+            productListNameAsc = filterdeSubProductList.sort((a, b) => b.productName.toLowerCase() < a.productName.toLowerCase() ? -1 : 1)
+            tbodyInf = generateTbodyInf(productListNameAsc)
+
+        }
+        if (sortoption == 3) {
+            productListNameAsc = filterdeSubProductList.sort((a, b) => new Date(a.registerDate) < new Date(b.registerDate) ? -1 : 1)
+            tbodyInf = generateTbodyInf(productListNameAsc)
+        }
+        if (sortoption == 4) {
+            productListNameAsc = filterdeSubProductList.sort((a, b) => new Date(b.registerDate) < new Date(a.registerDate) ? -1 : 1)
+            tbodyInf = generateTbodyInf(productListNameAsc)
+        }
+        else {
+            tbodyInf = generateTbodyInf(filterdeSubProductList)
+        }
+    }
+
+    tbody.append(tbodyInf)
+}
+)
+
+searchBtn.click(function () {
+    let searchOption = $('#search-options').val()
+    tbody.empty()
+    if (searchOption == 1) {
+        $.get('/products/search/productName/' + searchInput.val())
+            .done((res) => {
+                productsList = res
+                if (!productsList.length) {
+                    alert('검색결과가 없습니다')
+                }
+
+                tbody.append(generateTbodyInf(productsList))
+            })
+            .fail(() => alert('검색결과 없습니다'))
+    }else{
+        $.get('/products/search/username/' + searchInput.val())
+        .done((res) => {
+            productsList = res
+            if (!productsList.length) {
+                alert('검색결과가 없습니다')
+            }
+
+            tbody.append(generateTbodyInf(productsList))
+        })
+        .fail(() => alert('검색결과 없습니다'))
+    }
+
+
+})
+
+$(document).on("click", "#delete-btn", function(){
+    console.log($(this).val())
+    $.post('/products/delete',{productCode: $(this).val()})
+        .done((res) => {
+
+            window.location.href=window.location.href
+        })
+        .fail((res) => { alert(res.responseJSON) })
+});
+
+//  document.getElementById('delete-btn').addEventListener('click', () => {
+//     console.log("클릭")
+//  }) 

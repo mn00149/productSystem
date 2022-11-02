@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../public/css/signinForm.css" />
+    <link rel="stylesheet" href="../public/css/signupForm.css" />
     <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
 
 </head>
@@ -15,7 +15,7 @@
     <%- include('header') -%>
 
         <div class="container">
-            <form action="/users/" method="post" class="form" id="form">
+            <form  method="post" class="form" id="form">
                 <h2>Sign Up</h2>
                 <hr />
                 <div class="input-form margin-top">
@@ -57,7 +57,7 @@
                 </div>
 
                 <!-- <button>Register</button> -->
-                <div class="location-btn">
+                <div class="location-btn margin-top">
                     <button type="button" onclick="location.href='/signinForm';"> SignIn 화면으로 </button>
                     <button type="button" id="signupBtn">Register</button>
                 </div>
