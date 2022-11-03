@@ -6,8 +6,23 @@ let subCategory = $('#select-sub')
 let subCategoryInput = $('.sub-category-input')
 let productCodeInput = $('#product-code')
 let productNameInput = $('#product-name')
-
+let hidecode = $('#hidecode')
+let hidemain = $('#hidemain')
+let hidesub = $('#hidesub')
+let hidename = $('#hidename')
+let hidequan = $('#hidequan')
+let hidereturn = $('#hidereturn')
+let hiderental = $("#hiderental")
+let oproductCode = hidecode.text().trim()
 $(document).ready(function () {
+
+    let omainCategory = hidemain.text().trim()
+    let osubCategory = hidesub.text().trim()
+    let oproductname = hidename.text().trim()
+    let oquantity = hidequan.text().trim()
+    let oreturnAvl = hidereturn.text().trim()
+    let orentalAvl = hiderental.text().trim()
+
     $.get('/category').done((res) => {
         category = res
         for (let i = 0; i < category.length; i++) {
@@ -17,9 +32,17 @@ $(document).ready(function () {
             mainCategory.append(option)
         }
     })
-
-    $('#quantity').val('1')
-
+    mainCategoryInput.val(omainCategory)
+    subCategoryInput.val(osubCategory)
+    productCodeInput.val(oproductCode)
+    productNameInput.val(oproductname)
+    $('#quantity').val(oquantity)
+    if ($('#rent-true').val() == orentalAvl) {
+        $('#rent-true').prop('checked', true)
+    } else { $('#rent-false').prop('checked', true) }
+    if ($('#return-true').val() == oreturnAvl) {
+        $('#return-true').prop('checked', true)
+    } else { $('#return-false').prop('checked', true) }
 })
 
 mainCategory.change(function () {
@@ -72,7 +95,7 @@ $('input[type="checkbox"][name="return-avl"]').click(function () {
 
 });
 
-//물품등록버튼
+//물품수정버튼
 $('#register-btn').click(function () {
     let mainCategory = mainCategoryInput.val()
     let subCategory = subCategoryInput.val()
@@ -82,23 +105,24 @@ $('#register-btn').click(function () {
     let productCode = productCodeInput.val()
     let quantity = Number($('#quantity').val())
 
-    let data = { mainCategory, subCategory, productName, returnAvailability, rentalAvailability, productCode, quantity }
+    let data = { oproductCode, mainCategory, subCategory, productName, returnAvailability, rentalAvailability, productCode, quantity }
 
-    $.post('/products/register', data).done((res) => {
-        alert(res.message)
-        reset([mainCategoryInput, subCategoryInput, productCodeInput, productNameInput ])
+    $.post('/products/edit', data)
+        .done((res) => {
+            alert(res.message)
+            reset([mainCategoryInput, subCategoryInput, productCodeInput, productNameInput])
 
-    })
+        })
         .fail((res) => {
             alert(res.responseJSON.message)
             console.log(res)
         })
 })
 
-$('.reset-btn').click(function(){
-    reset([mainCategoryInput, subCategoryInput, productCodeInput, productNameInput ])
+$('.reset-btn').click(function () {
+    reset([mainCategoryInput, subCategoryInput, productCodeInput, productNameInput])
 })
-
+// 리셋 함수
 function reset(arr) {
     for (let i = 0; i < arr.length; i++) {
         arr[i].val('');

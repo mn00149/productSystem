@@ -1,6 +1,5 @@
 import Mongoose from 'mongoose';
 import { useVirtualId } from '../database/database.js';
-import dayjs from 'dayjs';
 
 const offset = 1000 * 60 * 60 * 9
 const koreaNow = new Date((new Date()).getTime() + offset)
@@ -36,8 +35,9 @@ export async function createProduct(product) {
   return new Product(product).save().then((data) => data.id);
 }
 
-export async function updateByProduct(product) {
-  return new Product(product).save().then((data) => data.id);
+export async function updateProduct(id, updateProduct) {
+  console.log(updateProduct)
+  return Product.findByIdAndUpdate(id,updateProduct)
 }
 
 export async function getAll(){
@@ -50,4 +50,8 @@ export async function findByProductName(productName) {
 
 export async function deleteByProductCode(productCode){
   return Product.deleteMany({productCode})
+}
+
+export async function updateByProduct(product) {
+  return new Product(product).save().then((data) => data.id);
 }

@@ -1,5 +1,6 @@
 import Mongoose from 'mongoose';
 import { useVirtualId } from '../database/database.js';
+import * as productRepository from './Product.js'
 
 const userSchema = new Mongoose.Schema({
   username: { type: String, required: true },
@@ -43,3 +44,22 @@ export async function updateUserbyUser(user) {
 export async function getAll() {
   return User.find({});
 }
+
+export async function updateLendingByProduct_id(product_id, data){
+
+  return User.update({'lending.product_id':product_id},
+  {'$set':{
+    'lending.$.mainCategory':data.mainCategory,
+    'lending.$.subCategory':data.subCategory,
+    'lending.$.productCode':data.productCode,
+    'lending.$.productName':data.productName
+  }
+}
+)}
+
+// export async function updateLendingByProductCode(oproductCode, data){
+//   return User.updateMany(
+//     {lending:{productCode: oproductCode},
+    
+//   })
+//}

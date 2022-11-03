@@ -26,27 +26,29 @@ function generateTbodyInf(productsList) {
                         <td>${productsList[i].category.mainCategory}</td>
                         <td>${productsList[i].category.subCategory}</td>
                         <td>
-                            <p>물품명:${productsList[i].productName}</p>
-                            <p>코드:${productsList[i].productCode}</p>
+                            <p>물품명: ${productsList[i].productName}</p>
+                            <p>코드: ${productsList[i].productCode}</p>
                         </td>
                         <td>
-                            <p>총량:${total}</p>
-                            <p>대여중:${lending}</p>
-                            <p>대여가능:${left}</p>
+                            <p>총량: ${total}</p>
+                            <p>대여중: ${lending}</p>
+                            <p>잔여수: ${left}</p>
                         </td>
                         <td>
-                            <p>대여가능 여부:${availability(productsList[i].rentalAvailability)}</p>
-                            <p>반납필요 여부:${availability(productsList[i].returnAvailability)}</p>
+                            <p>대여가능 여부: ${availability(productsList[i].rentalAvailability)}</p>
+                            <p>반납필요 여부: ${availability(productsList[i].returnAvailability)}</p>
                         </td>
-                        <td>${productsList[i].registerDate}</td>
+                        <td> ${productsList[i].registerDate}</td>
                         <td>
                             <div class="select-btn">
-                                <button value="${productsList[i].productCode}">대여자 목록</button>
+                                <button type="button" id="user-list" value="${productsList[i].productCode}">대여자 목록</button>
+                                <button type="button" value="${productsList[i].productCode}">대여이력</button>
                                 ${
-                                    productsList[i].rentalAvailability ? "<button type=button value="+productsList[i].productCode+">대여</button>" : ""
+                                    productsList[i].rentalAvailability ? "<button id=rental-btn type=button value="+productsList[i].productCode+">대여</button>" : ""
                                 }
                                 <button id="delete-btn" type="button" value="${productsList[i].productCode}">삭제</button>
-                                <button type="button" value="${productsList[i].productCode}">수정</button>
+                                <button id="edit-btn" type="button" value="${productsList[i].productCode}">수정</button>
+                                
                             <div>
                         </td>
                     </tr>
@@ -193,7 +195,7 @@ $('#sorting').change(function () {
     tbody.append(tbodyInf)
 }
 )
-
+//검색
 searchBtn.click(function () {
     let searchOption = $('#search-options').val()
     tbody.empty()
@@ -225,13 +227,21 @@ searchBtn.click(function () {
 })
 
 $(document).on("click", "#delete-btn", function(){
-    console.log($(this).val())
     $.post('/products/delete',{productCode: $(this).val()})
-        .done((res) => {
-
-            window.location.href=window.location.href
-        })
+        .done(() => { window.location.href=window.location.href })
         .fail((res) => { alert(res.responseJSON) })
+});
+
+$(document).on("click", "#rental-btn", function(){   
+    window.open('/products/rentalForm/'+$(this).val(),'rentalform popup', 'width=700px,height=800px,scrollbars=yes')
+});
+
+$(document).on("click", "#user-list", function(){   
+    window.open('/products/usersInf/'+$(this).val(),'user-list form popup', 'width=700px,height=800px,scrollbars=yes')
+});
+
+$(document).on("click", "#edit-btn", function(){   
+    window.open('/products/edit/'+$(this).val(),'product edit form popup', 'width=700px,height=800px,scrollbars=yes')
 });
 
 //  document.getElementById('delete-btn').addEventListener('click', () => {

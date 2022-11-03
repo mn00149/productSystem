@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <link rel="stylesheet" href="../public/css/header.css" />
-    <link rel="stylesheet" href="../public/css/productRegister.css" />
-
+    <link rel="stylesheet" href="../../public/css/product/productEdit.css" />
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
+
 <body>
-    <%- include('header') -%>
     <container class="container">
         <div class="register-form">
             <div class="form-control">
-                <h3>물품 등록</h3>
-                <button class="reset-btn"><img width="20px" height="20px" src="../public/image/reset.png" alt="#"></button>
+                <h3>물품 수정</h3>
+                <button class="reset-btn"><img width="20px" height="20px" src="../../public/image/reset.png" alt="#"></button>
             </div>
             <div class="form-control">
                 <p>대분류:</p>
@@ -38,13 +37,13 @@
             </div>
             <div class="form-control">
                 <p>대여가능 여부</p>
-                가능: <input type="checkbox" name="rent-avl" value="1" id="rent-true" checked>
-                불가: <input type="checkbox" name="rent-avl" value="0" id="">
+                가능: <input type="checkbox" name="rent-avl" value="1" id="rent-true">
+                불가: <input type="checkbox" name="rent-avl" value="0" id="rent-false">
             </div>
             <div class="form-control">
                 <p>반환 여부</p>
-                필요: <input type="checkbox" name="return-avl" value="1" id="return-true" checked>
-                불필요: <input type="checkbox" name="return-avl" value="0" id="">
+                필요: <input type="checkbox" name="return-avl" value="1" id="return-true">
+                불필요: <input type="checkbox" name="return-avl" value="0" id="return-false">
             </div>
             <div class="form-control">
                 <p>제품코드:</p>
@@ -55,14 +54,35 @@
                 <input id="quantity" type="number">
             </div>
             <div class="form-control">
-                <button>엑셀</button>
                 <button type="button" id="register-btn">등록</button>
-                <button>취소</button>
+                <button type="button" id="cancel-btn">취소</button>
             </div>
         </div>
         
     </container>
-    <script type="module" src="../public/js/productRegister.js"></script>
-
+       <div class="hideInfo" id="hidecode">
+        <%= product.productCode %>
+       </div>
+       <div class="hideInfo" id="hidemain">
+        <%= product.category.mainCategory %>
+       </div>
+       <div class="hideInfo" id="hidesub">
+        <%= product.category.subCategory %>
+       </div>
+       <div class="hideInfo" id="hidename">
+        <%= product.productName %>
+       </div>
+       <div class="hideInfo" id="hidereturn">
+        <%= product.returnAvailability %>
+       </div>
+       <div class="hideInfo" id="hiderental">
+        <%= product.rentalAvailability %>
+       </div>
+       <div class="hideInfo" id="hidequan">
+        <%= product.quantity %>
+       </div>
+         
+        <script src="../../public/js/product/productEdit.js"></script>
 </body>
+
 </html>

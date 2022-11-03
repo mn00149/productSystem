@@ -77,11 +77,11 @@ router.post('/signin',async (req, res) => {
   const { employeeNumber, password } = req.body;
   const user = await userRepository.findByEmployeeNumber(employeeNumber);
   if (!user) {
-    return res.status(401).json({ message: "Invalid email or password" });
+    return res.status(401).json({ message: "Invalid employee number or password" });
   }
    const isValidPassword = await bcrypt.compare(password, user.password)
    if (!isValidPassword) {
-    return res.status(401).json({ message: "Invalid email or password" });
+    return res.status(401).json({ message: "Invalid emailemployee number or password" });
   }
 
   const token = createJwtToken(employeeNumber)

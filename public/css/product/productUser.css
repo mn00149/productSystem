@@ -1,0 +1,38 @@
+*{
+    box-sizing: border-box;
+}
+
+body{
+    background-color: antiquewhite;
+}
+.container{
+   
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+table{
+    padding: 10px;
+    background-color: azure;
+    border-radius: 10px;
+    margin-top: 60px;
+    width: 80%;
+    border-collapse: collapse;
+
+}
+
+thead>tr th{
+    text-align: center;
+}
+
+
+
+td{
+    border-top: 1px solid rgb(220, 217, 217);
+    text-align: center;
+}
+
+.margin-bottom5{
+    margin-bottom: 2px;
+}
