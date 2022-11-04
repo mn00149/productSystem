@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../public/css/signupForm.css" />
+    <link rel="stylesheet" href="../public/css/user/signupForm.css" />
     <link rel="stylesheet" href="../public/css/header.css" />
     <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
 
@@ -16,7 +16,7 @@
     <%- include('header') -%>
 
         <div class="container">
-            <form  method="post" class="form" id="form">
+            <form method="post" class="form" id="form">
                 <h2>Sign Up</h2>
                 <hr />
                 <div class="input-form margin-top">
@@ -68,30 +68,53 @@
         </div>
 </body>
 <script>
-    $("#signupBtn").click(function () {    // parameter가 있는 형태
+    function checkPasswordMatch(input1, input2) {
+        const re = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+        if(re.test(input1)){
+            alert('password는 특수문자 미포함 하여야 합니다')
+            return false
+        }
+        if (input1 !== input2) {
+            alert("Password is not match")
+            return false
+        }
+        return true
+    }
 
+    function checkEmail(input) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (re.test(input.value.trim())) {
+            showSuccess(input);
+        } else {
+            showError(input, 'Email is not valid');
+        }
+    }
+    $("#signupBtn").click(function () {
         let username = $('#username').val();
         let password = $('#password').val();
+        let password2 = $('#password2').val();
         let email = $('#email').val();
         let department = $('#department').val();
         let employeeNumber = $('#employeeNumber').val();
         let role = $('#role').val();
         employeeNumber = Number(employeeNumber);
         let data = { username, password, email, department, employeeNumber, role };
-        $.post("/users/signup", data)
+
+        if(checkPasswordMatch(password, password2)){
+
+            $.post("/users/signup", data)
             .done((res) => {
                 alert(res.message)
                 location.href = "/signinForm";
-                
             })
             .fail((res) => {
                 alert(res.responseJSON.message)
                 console.log(res)
             })
-
+        }
     });
 
- 
+
 </script>
 
 </html>

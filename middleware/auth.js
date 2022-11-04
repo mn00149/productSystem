@@ -19,7 +19,6 @@ export const isAuth = async (req, res, next) => {
                 return res.status(401).json(AUTH_ERROR);
             }
             req.user = user
-            console.log('auth미들웨어')
             next()
         })
     }

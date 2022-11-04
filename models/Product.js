@@ -17,6 +17,7 @@ const productSchema = new Mongoose.Schema({
   quantity: { type: Number, default: 1 },// 수량이 0 인경우 대여 불가능하게 방법1. 프런트에서 대여버튼없애기 2. 백에서 확인수 ㄱㄷ셔구
   //대여이력 저장 하는 곳 , 물품별 대여이력출력, 그리고 대여현황(리스트중애서 반납날짜가 없는 것 or 00-00-00인것 만 뽑아내면 됨) 출력시 사용
   //추후 배열안에 틀어갈 수 있는 커스텀 클래스 사용 할 수 있는지 확인 해 볼 것!!
+  rentalQuantity: { type: Number, default: 0 },
   lended: { type: Array, default: [] },
   registerDate: {type:String, default: registerDate}
 

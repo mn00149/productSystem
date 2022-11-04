@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../public/css/header.css" />
+    <link rel="stylesheet" href="../../public/css/user/userStatus.css" />
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<%- include('../header') -%>
+    <body>
+
+        <div class="container">
+            <div class="title">
+                <h3>나의 대여현황</h3>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>대분류</th>
+                        <th>소분류</th>
+                        <th>물품명</th>
+                        <th>물품코드</th>
+                        <th>사유</th>
+                        <th>대여기간</th>
+                        <th>반납</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for(let i=0; i< user.lending.length; i++){ %>
+                        <tr>
+                            <td>
+                                <%= user.lending[i].mainCategory %>
+                            </td>
+                            <td>
+                                <%= user.lending[i].subCategory %>
+                            </td>
+                            <td>
+                                <%= user.lending[i].productName %>
+                            </td>
+                            <td>
+                                <%= user.lending[i].productCode %>
+                            </td>
+                            <td><%= user.lending[i].reason %></td>
+                            <td>
+                                <p><%= user.lending[i].issuedate %></p>
+                                ~
+                                <p><%= user.lending[i].duedate %></p>
+                            </td>
+                            <td>
+                                <form action="/products/return" method="post">
+                                    <input type="hidden" name="productCode" value="<%= user.lending[i].productCode %>">
+                                    <button id="return-btn" type="submit">반납</button>
+                                </form>
+                                
+                            </td>
+                        </tr>
+                        <%}%>
+                </tbody>
+            </table>
+        </div>
+        <script src="../../public/js/user/userStatus.js"></script>
+    </body>
+
+</html>

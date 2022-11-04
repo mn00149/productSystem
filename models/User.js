@@ -57,9 +57,3 @@ export async function updateLendingByProduct_id(product_id, data){
 }
 )}
 
-// export async function updateLendingByProductCode(oproductCode, data){
-//   return User.updateMany(
-//     {lending:{productCode: oproductCode},
-    
-//   })
-//}

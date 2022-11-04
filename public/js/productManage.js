@@ -18,9 +18,10 @@ function availability(i) {
 function generateTbodyInf(productsList) {
     let product = ""
     for (let i = 0; i < productsList.length; i++) {
-        let total = productsList[i].quantity + productsList[i].lended.length
-        let lending = productsList[i].lended.length
-        let left = total - lending
+        
+        let lending = productsList[i].rentalQuantity
+        let left = productsList[i].quantity
+        let total = lending + left
         product += `                        
                     <tr>
                         <td>${productsList[i].category.mainCategory}</td>
@@ -115,7 +116,7 @@ subCategory.change(function () {
     tbody.empty()
     tbody.append(tbodyInf)
 })
-//정려이 바뀔때
+//정렬이 바뀔때
 $('#sorting').change(function () {
     tbody.empty()
     let sortoption = $(this).val()

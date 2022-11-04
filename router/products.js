@@ -55,7 +55,6 @@ router.get('/getAll', async (req, res) => {
 router.get('/rentalForm/:productCode', async(req, res) => {
   const productCode = req.params.productCode
   const product = await productRepository.findByProductCode(productCode)
-
   return res.render('rentalForm', {product})
 })
 // 물품 대여 api
@@ -69,13 +68,14 @@ router.post('/rent', isAuth, async (req, res) => {
     return res.status(409).json({ message: "이미 대여중 입니다, 반납후 대여 가능 합니다" })
   }
   let product = await productRepository.findByProductCode(productCode)
+  if(product.rentalAvailability == 0){return res.status(409).json({message:"대여가 불가능한 품목입니다"})}
   const product_id = product._id.toHexString()
   if(product.returnAvailability == 1){
     if(!duedate || !issuedate || new Date(issuedate) > new Date(duedate)) return res.status(409).json({message:"대여시간 설정이 잘못되었습니다"})
   }
   issuedate = issuedate.replace("T", " ")
   duedate = duedate.replace("T", " ")
-  const newQuantity = product.quantity - 1
+  const newQuantity = product.quantity - 1 
   if (newQuantity < 0) { return res.status(409).json({ message: "대여가능한 수량이 없습니다" }) }
   const lending = {
     product_id,
@@ -84,7 +84,8 @@ router.post('/rent', isAuth, async (req, res) => {
     productName: product.productName,
     productCode,
     duedate,
-    issuedate
+    issuedate,
+    reason
   }
   const lended = {
     employeeNumber: user.employeeNumber,
@@ -96,6 +97,7 @@ router.post('/rent', isAuth, async (req, res) => {
   user.lending.push(lending)
   product.lended.push(lended)
   product.quantity = newQuantity
+  product.rentalQuantity += 1
   await userRepository.updateUserbyUser(user)
   await productRepository.updateByProduct(product)
   return res.status(200).json({ message: '대여 성공' })
@@ -115,10 +117,9 @@ router.get('/search/username/:username', async (req, res) => {
   const products = await productRepository.getAll()
   const searchProducts = products.map((product) => {
     for(let i=0; i<product.lended.length; i++){
-      if(product.lended[i].username.includes(username))return product 
+      if(product.lended[i].username.includes(username) && !product.lended[i].returndate)return product 
     }
   }).filter((product) => product)
-  console.log(searchProducts)
   return res.status(200).json(searchProducts)
 })
 
@@ -126,18 +127,25 @@ router.get('/search/username/:username', async (req, res) => {
 router.get('/usersInf/:productCode', async (req, res) => {
   const productCode = req.params.productCode
   const product = await productRepository.findByProductCode(productCode)
+  const lendedUsers = product.lended.filter((user) => !user.returndate)
+  if(!lendedUsers.length) return res.render('error/noContent')
+  return res.render('product/productUser', {lendedUsers})
+})
+
+//물품별 대여이력 목록
+router.get("/rentalRecord/:productCode", async (req, res) => {
+  const productCode = req.params.productCode
+  const product = await productRepository.findByProductCode(productCode)
   const lendedUsers = product.lended
   if(!lendedUsers.length) return res.render('error/noContent')
   return res.render('product/productUser', {lendedUsers})
 })
 // 물품반납 API
-router.put('/:productCode', isAuth, async (req, res) => {
-  const { productCode } = req.params
+router.post('/return', isAuth, async (req, res) => {
+  const productCode = req.body.productCode
   const returndate = util.getDate()
   let user = req.user
   let product = await productRepository.findByProductCode(productCode)
-
-  user.lendingList = user.lendingList.filter((lendingproductCode) => lendingproductCode != productCode)
   user.lending = user.lending.filter((lendingproduct) => lendingproduct.productCode != productCode)
 
   const updateLended = product.lended.map((record) => {
@@ -150,11 +158,12 @@ router.put('/:productCode', isAuth, async (req, res) => {
   })
 
   product.quantity += 1
+  product.rentalQuantity -= 1
   product.lended = updateLended
 
   await productRepository.updateByProduct(product)
   await userRepository.updateUserbyUser(user)
-  res.status(201).send('반닙성공');
+  res.redirect('/users/status')
 });
 
 //물품 편집화면 출력
@@ -166,7 +175,7 @@ router.get('/edit/:productCode', async (req, res) => {
 //물품 편집 api
 router.post('/edit', async (req, res) => {
   const {oproductCode, mainCategory, subCategory, productName, returnAvailability, rentalAvailability, productCode, quantity } = req.body
-  console.log(mainCategory)
+  
   const registerDate = util.getDate()
   // 프런트단에서도 대분류 소분류 기본값주도록 필요시 설정
   if (!mainCategory) { return res.status(401).json({ message: "Main Category reqiured" }) }
@@ -194,7 +203,6 @@ router.post('/edit', async (req, res) => {
 //물품 삭제 api
 router.post('/delete', async (req, res) => {
   const { productCode } = req.body
-  console.log(productCode)
   await productRepository.deleteByProductCode(productCode)
   res.status(201).json({ message: '삭제되었습니다' });
 });

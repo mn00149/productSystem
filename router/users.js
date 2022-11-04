@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { body, param, validationResult } from 'express-validator';
 import * as userRepository from '../models/User.js';
+import { isAuth } from '../middleware/auth.js';
 
 
 const router = express.Router();
@@ -30,8 +31,8 @@ const validateRegister = [
   body("employeeNumber").isInt().withMessage("사번은 숫자 입니다"),
   body("password")
     .trim()
-    .isLength({ min: 3 })
-    .withMessage("password should be at least 3 characters"),
+    .isLength({ min: 4 })
+    .withMessage("password should be at least 4 characters"),
   body("username").notEmpty().withMessage("nickname is missing"),
   validate,
 ];
@@ -67,9 +68,6 @@ try{
 }catch{
   return res.status(500).json({message: "서버에 에러가 발생하였습니다. 잠시후 다시 시도해주시길 바랍니다"})
 }
-
-
-
 })
 
 //로그인 api
@@ -99,5 +97,12 @@ router.post('/signin',async (req, res) => {
 function createJwtToken(employeeNumber) {
   return jwt.sign({ employeeNumber }, jwtSecretKey, { expiresIn: jwtExpiresInDays });
 }
+//나의 현황 페이지렌더링
+router.get('/status', isAuth, (req, res) => {
+  const user = req.user
+  res.render('user/userStatus', {user})
+})
+
+
 
 export default router;

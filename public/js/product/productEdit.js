@@ -110,8 +110,7 @@ $('#register-btn').click(function () {
     $.post('/products/edit', data)
         .done((res) => {
             alert(res.message)
-            reset([mainCategoryInput, subCategoryInput, productCodeInput, productNameInput])
-
+            window.close();
         })
         .fail((res) => {
             alert(res.responseJSON.message)

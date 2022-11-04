@@ -7,22 +7,6 @@ import { body, param, validationResult } from 'express-validator';
 import { connectDB } from './database/database.js';
 import { isAuth } from './middleware/auth.js';
 
-
-// const {auth} = require('./middleware/auth')
-
-// make secure!!
-// const mongoURI = 'mongodb+srv://mn00149:qkfzks1!@pracnode.ygvtct0.mongodb.net/?retryWrites=true&w=majority';
-// mongoose.connect(mongoURI, {
-//     //몽구스 6.0d-이상에선 요기서 설정한것이 어차피 다 기본값이기 때문에 주석 처리
-//   dbName:'clovineProjectAtlas',
-//   useNewUrlParser: true,  
-//   useUnifiedTopology: true
-//     // useFindAndModify: false
-//     // useCreateIndex: true
-// }).then(() => console.log("MongoDB connected...."))
-//   .catch(err => console.log(err))
-// //바디파서는 이제 안씀 exprress에 내장되어있어서~
-
 const port = 8080
 const app = express();
 app.set('views', './views')
@@ -49,7 +33,7 @@ app.use('/users', userRouter);
 app.use('/category', categoryRouter);
 app.get('/', (req, res) => {
 
-  res.send('get root')
+  res.redirect('/products/manage')
 });
 //회원가입 페이지
 app.get('/signupForm', (req, res) => {
@@ -66,6 +50,9 @@ app.get('/authTest', isAuth, async (req, res) => {
   res.send(user)
 });
 
+app.post('/test', async(req, res) => {
+  console.log(req.body)
+})
 
 connectDB()
   .then(() => {
