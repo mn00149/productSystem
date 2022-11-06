@@ -1,4 +1,6 @@
 import express from 'express';
+import ExcelJS from 'exceljs';
+import fs from 'fs';
 import * as productRepository from '../models/Product.js';
 import * as categoryRepository from '../models/Category.js';
 import * as userRepository from '../models/User.js';
@@ -51,11 +53,55 @@ router.get('/getAll', async (req, res) => {
   if (!products) { return res.status(401).json({ message: '현제 등록된 물품이 없습니다' }) }
   return res.status(201).json(products)
 })
+
+// 물품 리스트 엑셀 내보내기
+router.get('/export/excel', async (req, res) => {
+
+  const products = await productRepository.getAll()
+  const workbook = new ExcelJS.Workbook()
+  const sheet = workbook.addWorksheet('')
+  const excelData = []
+  for (let i = 0; i < products.length; i++) {
+    let { category, productName, productCode, rentalQuantity, quantity, rentalAvailability, returnAvailability, registerDate } = products[i]
+
+    rentalAvailability == 1 ? rentalAvailability = "O" : rentalAvailability = "X"
+    returnAvailability == 1 ? returnAvailability = "O" : returnAvailability = "X"
+    excelData.push([category.mainCategory, category.subCategory, productName, productCode, rentalQuantity, quantity, rentalAvailability, returnAvailability, registerDate]);
+
+  }
+  sheet.mergeCells('A1:J1');
+  sheet.getCell('A1').value = '물품 리스트';
+  sheet.getCell('A1').font = { size: 14, bold: true };
+  sheet.getCell('A1').alignment = { horizontal: 'center' };
+  sheet.getCell('A1').fill = {
+    type: 'pattern',
+    pattern: 'solid',
+    fgColor: { argb: 'FFFFFF00' },
+    bgColor: { argb: 'FF0000FF' },
+  };
+  sheet.getRow(2).values = ['대분류', '소분류', '품명', '물품번호', '대여중', '잔여수', '대여여부', '반납여부', '등록일'];
+  // 엑셀 리스트 삽입
+  sheet.addRows(excelData);
+
+  const _filename = `temp${new Date().getTime()}.xlsx`;
+  await workbook.xlsx.writeFile(_filename);  // filename은 임시 파일이므로 어지간하면 겹치지않게 getTime
+
+  res.setHeader("Content-disposition", "attachment; filename=ReviewComment.xlsx"); // 다운받아질 파일명 설정
+  res.setHeader("Content-type", "application/vnd.ms-excel; charset=utf-8"); // 파일 형식 지정
+
+  var filestream = fs.createReadStream(_filename); // readStream 생성
+  filestream.pipe(res); // express 모듈의 response를 pipe에 넣으면 스트림을 통해 다운로드된다.
+
+  //fs.unlinkSync(_filename); // 다운했으니 삭제
+  return res.status(200).json({ message: 'dprtp' })
+
+})
+
 // 물품대여 폼
-router.get('/rentalForm/:productCode', async(req, res) => {
+router.get('/rentalForm/:productCode', async (req, res) => {
   const productCode = req.params.productCode
   const product = await productRepository.findByProductCode(productCode)
-  return res.render('rentalForm', {product})
+  return res.render('rentalForm', { product })
 })
 // 물품 대여 api
 router.post('/rent', isAuth, async (req, res) => {
@@ -68,14 +114,14 @@ router.post('/rent', isAuth, async (req, res) => {
     return res.status(409).json({ message: "이미 대여중 입니다, 반납후 대여 가능 합니다" })
   }
   let product = await productRepository.findByProductCode(productCode)
-  if(product.rentalAvailability == 0){return res.status(409).json({message:"대여가 불가능한 품목입니다"})}
+  if (product.rentalAvailability == 0) { return res.status(409).json({ message: "대여가 불가능한 품목입니다" }) }
   const product_id = product._id.toHexString()
-  if(product.returnAvailability == 1){
-    if(!duedate || !issuedate || new Date(issuedate) > new Date(duedate)) return res.status(409).json({message:"대여시간 설정이 잘못되었습니다"})
+  if (product.returnAvailability == 1) {
+    if (!duedate || !issuedate || new Date(issuedate) > new Date(duedate)) return res.status(409).json({ message: "대여시간 설정이 잘못되었습니다" })
   }
   issuedate = issuedate.replace("T", " ")
   duedate = duedate.replace("T", " ")
-  const newQuantity = product.quantity - 1 
+  const newQuantity = product.quantity - 1
   if (newQuantity < 0) { return res.status(409).json({ message: "대여가능한 수량이 없습니다" }) }
   const lending = {
     product_id,
@@ -116,8 +162,8 @@ router.get('/search/username/:username', async (req, res) => {
   const username = req.params.username
   const products = await productRepository.getAll()
   const searchProducts = products.map((product) => {
-    for(let i=0; i<product.lended.length; i++){
-      if(product.lended[i].username.includes(username) && !product.lended[i].returndate)return product 
+    for (let i = 0; i < product.lended.length; i++) {
+      if (product.lended[i].username.includes(username) && !product.lended[i].returndate) return product
     }
   }).filter((product) => product)
   return res.status(200).json(searchProducts)
@@ -128,8 +174,8 @@ router.get('/usersInf/:productCode', async (req, res) => {
   const productCode = req.params.productCode
   const product = await productRepository.findByProductCode(productCode)
   const lendedUsers = product.lended.filter((user) => !user.returndate)
-  if(!lendedUsers.length) return res.render('error/noContent')
-  return res.render('product/productUser', {lendedUsers})
+  if (!lendedUsers.length) return res.render('error/noContent')
+  return res.render('product/productUser', { lendedUsers })
 })
 
 //물품별 대여이력 목록
@@ -137,8 +183,8 @@ router.get("/rentalRecord/:productCode", async (req, res) => {
   const productCode = req.params.productCode
   const product = await productRepository.findByProductCode(productCode)
   const lendedUsers = product.lended
-  if(!lendedUsers.length) return res.render('error/noContent')
-  return res.render('product/productUser', {lendedUsers})
+  if (!lendedUsers.length) return res.render('error/noContent')
+  return res.render('product/productUser', { lendedUsers })
 })
 // 물품반납 API
 router.post('/return', isAuth, async (req, res) => {
@@ -170,12 +216,12 @@ router.post('/return', isAuth, async (req, res) => {
 router.get('/edit/:productCode', async (req, res) => {
   const productCode = req.params.productCode
   const product = await productRepository.findByProductCode(productCode)
-  res.render('product/productEdit', {product})
+  res.render('product/productEdit', { product })
 })
 //물품 편집 api
 router.post('/edit', async (req, res) => {
-  const {oproductCode, mainCategory, subCategory, productName, returnAvailability, rentalAvailability, productCode, quantity } = req.body
-  
+  const { oproductCode, mainCategory, subCategory, productName, returnAvailability, rentalAvailability, productCode, quantity } = req.body
+
   const registerDate = util.getDate()
   // 프런트단에서도 대분류 소분류 기본값주도록 필요시 설정
   if (!mainCategory) { return res.status(401).json({ message: "Main Category reqiured" }) }
@@ -194,9 +240,9 @@ router.post('/edit', async (req, res) => {
   if (!findProduct) {
     return res.status(409).json({ message: `수정할 물품이 없습니다 관리자에게 문의 바랍니다` })
   }
-  const updateProduct = {productName, returnAvailability, rentalAvailability, productCode, quantity, category, registerDate }
+  const updateProduct = { productName, returnAvailability, rentalAvailability, productCode, quantity, category, registerDate }
   await productRepository.updateProduct(findProduct._id, updateProduct)
-  await userRepository.updateLendingByProduct_id(product_id, {mainCategory, subCategory, productCode, productName})
+  await userRepository.updateLendingByProduct_id(product_id, { mainCategory, subCategory, productCode, productName })
   res.status(201).json({ message: "물품수정 성공" });
 });
 

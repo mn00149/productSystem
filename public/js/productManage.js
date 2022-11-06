@@ -116,7 +116,7 @@ subCategory.change(function () {
     tbody.empty()
     tbody.append(tbodyInf)
 })
-//정렬이 바뀔때
+//정렬이 바뀔때 => 반복되는 코드가 많은듯 함수로 줄일 수 있는지 리팩토링시 생각 해 볼것
 $('#sorting').change(function () {
     tbody.empty()
     let sortoption = $(this).val()
@@ -227,6 +227,12 @@ searchBtn.click(function () {
 
 })
 
+$('#export-btn').click(() => {
+    $.get('/products/export/excel')
+    .done((res) => console.log(res))
+    .fail(() => {alert('실패')})
+})
+
 $(document).on("click", "#delete-btn", function(){
     $.post('/products/delete',{productCode: $(this).val()})
         .done(() => { window.location.href=window.location.href })
@@ -245,6 +251,3 @@ $(document).on("click", "#edit-btn", function(){
     window.open('/products/edit/'+$(this).val(),'product edit form popup', 'width=700px,height=800px,scrollbars=yes')
 });
 
-//  document.getElementById('delete-btn').addEventListener('click', () => {
-//     console.log("클릭")
-//  }) 
