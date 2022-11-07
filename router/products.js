@@ -58,6 +58,7 @@ router.get('/getAll', async (req, res) => {
 router.get('/export/excel', async (req, res) => {
 
   const products = await productRepository.getAll()
+
   const workbook = new ExcelJS.Workbook()
   const sheet = workbook.addWorksheet('')
   const excelData = []
@@ -83,8 +84,9 @@ router.get('/export/excel', async (req, res) => {
   // 엑셀 리스트 삽입
   sheet.addRows(excelData);
 
-  const _filename = `temp${new Date().getTime()}.xlsx`;
-  await workbook.xlsx.writeFile(_filename);  // filename은 임시 파일이므로 어지간하면 겹치지않게 getTime
+  const _filename = `C:/Users/mn001/Downloads/product_list${new Date().getTime()}.xlsx`;
+  try {
+    await workbook.xlsx.writeFile(_filename);  // filename은 임시 파일이므로 어지간하면 겹치지않게 getTime
 
   res.setHeader("Content-disposition", "attachment; filename=ReviewComment.xlsx"); // 다운받아질 파일명 설정
   res.setHeader("Content-type", "application/vnd.ms-excel; charset=utf-8"); // 파일 형식 지정
@@ -93,7 +95,13 @@ router.get('/export/excel', async (req, res) => {
   filestream.pipe(res); // express 모듈의 response를 pipe에 넣으면 스트림을 통해 다운로드된다.
 
   //fs.unlinkSync(_filename); // 다운했으니 삭제
-  return res.status(200).json({ message: 'dprtp' })
+  return res.status(200).json({ message: '엑셀로 내보내 졌습니다' })
+  } catch (error) {
+    console.log(e);
+    res.status(400).json({message:'파일을 다운로드하는 중에 에러가 발생하였습니다.'});
+    return;
+  }
+  
 
 })
 
@@ -184,7 +192,7 @@ router.get("/rentalRecord/:productCode", async (req, res) => {
   const product = await productRepository.findByProductCode(productCode)
   const lendedUsers = product.lended
   if (!lendedUsers.length) return res.render('error/noContent')
-  return res.render('product/productUser', { lendedUsers })
+  return res.render('product/rentalRecord', { lendedUsers })
 })
 // 물품반납 API
 router.post('/return', isAuth, async (req, res) => {

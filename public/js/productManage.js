@@ -43,7 +43,7 @@ function generateTbodyInf(productsList) {
                         <td>
                             <div class="select-btn">
                                 <button type="button" id="user-list" value="${productsList[i].productCode}">대여자 목록</button>
-                                <button type="button" value="${productsList[i].productCode}">대여이력</button>
+                                <button type="button" id="rental-record" value="${productsList[i].productCode}">대여이력</button>
                                 ${
                                     productsList[i].rentalAvailability ? "<button id=rental-btn type=button value="+productsList[i].productCode+">대여</button>" : ""
                                 }
@@ -226,11 +226,11 @@ searchBtn.click(function () {
 
 
 })
-
+//엑셀로 내보내기
 $('#export-btn').click(() => {
     $.get('/products/export/excel')
-    .done((res) => console.log(res))
-    .fail(() => {alert('실패')})
+    .done((res) => alert(res.message))
+    .fail(() => {alert('다운로드중 에러가 발생 했습니다 에러가 지속될 경우 관리자에게 문의 바랍니다')})
 })
 
 $(document).on("click", "#delete-btn", function(){
@@ -245,6 +245,10 @@ $(document).on("click", "#rental-btn", function(){
 
 $(document).on("click", "#user-list", function(){   
     window.open('/products/usersInf/'+$(this).val(),'user-list form popup', 'width=700px,height=800px,scrollbars=yes')
+});
+
+$(document).on("click", "#rental-record", function(){   
+    window.open('/products/rentalRecord/'+$(this).val(),'user-list form popup', 'width=700px,height=800px,scrollbars=yes')
 });
 
 $(document).on("click", "#edit-btn", function(){   

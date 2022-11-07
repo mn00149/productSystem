@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../public/css/product/productUser.css" />
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>이름</th>
+                    <th>사번</th>
+                    <th>사유</th>
+                    <th>대여기간</th>
+                    <th>반납일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(let i=0; i<lendedUsers.length; i++){ %>
+                    <tr>
+                        <td><%=lendedUsers[i].username%></td>
+                        <td><%=lendedUsers[i].employeeNumber%></td>
+                        <td><%=lendedUsers[i].reason%></td>
+                        <td><p class="margin-bottom5"><%=lendedUsers[i].issuedate%></p>~<p class="margin-bottom5"><%=lendedUsers[i].duedate%></p> </td>
+                        <td><%=lendedUsers[i].returndate%></td>
+                    </tr>
+                <%}%>
+            </tbody>
+        </table>
+    </div>
+        <script src="../../public/js/product/productUser.js"></script>
+</body>
+
+</html>
