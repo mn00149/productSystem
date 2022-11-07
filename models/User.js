@@ -1,6 +1,8 @@
 import Mongoose from 'mongoose';
 import { useVirtualId } from '../database/database.js';
 import * as productRepository from './Product.js'
+import * as deletedUserRepository from './DeletedUser.js'
+
 
 const userSchema = new Mongoose.Schema({
   username: { type: String, required: true },
@@ -11,7 +13,6 @@ const userSchema = new Mongoose.Schema({
   role: { type: String, default: 'nomal' }, //직책,
   right: { type: String, default: 'open' }, //권한 (등록, 열람, 편집, 대여)
   lending: {type: Array, default: []},
-  lendingList: {type: Array, default: []} // 대여한 물품코드를 저장 한 뒤 대여시 api 에서 확인 하여 있으면 대여 못하게 막기
 },{timestamps:true});
 
 useVirtualId(userSchema);
@@ -56,4 +57,9 @@ export async function updateLendingByProduct_id(product_id, data){
   }
 }
 )}
+
+export async function deleteByEmployeeNumber(employeeNumber){
+  const deletedUser = await User.findOneAndDelete({employeeNumber})
+  return await deletedUserRepository.create(deletedUser)
+}
 

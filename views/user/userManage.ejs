@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../public/css/header.css" />
+    <link rel="stylesheet" href="../../public/css/user/userManage.css" />
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<%- include('../header') -%>
+    <body>
+        <div class="wrap">
+            <div class="container">
+                <% for(let i=0; i<users.length; i++){%>
+                <div class="user-card">
+                    <ul class="userInfo-list">
+                        <li><strong>이름:</strong> <%= users[i].username %></li>
+                        <li><strong>부서:</strong> <%= users[i].department %></li>
+                        <li><strong>직책:</strong> <%= users[i].role %></li>
+                        <li><strong>이메일:</strong> <%= users[i].email %></li>
+                        <li><strong>권한:</strong> <%= users[i].right %></li>
+                    </ul>
+                    <div class="btn-list">
+                        <button class="delete-user-btn" value="<%=users[i].employeeNumber%>" type="button">추방</button>
+                        <button class="edit-rigth-btn" value="<%=users[i].employeeNumber%>" type="button">권한수정</button>
+                        <button class="reset-password-btn" value="<%=users[i].employeeNumber%>" type="button">password 초기화</button>
+                    </div>
+                </div>
+            <%}%>
+            </div>
+        </div>
+        
+        <script src="../../public/js/user/userManage.js"></script>
+    </body>
+
+</html>

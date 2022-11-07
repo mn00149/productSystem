@@ -1,6 +1,8 @@
 import express from 'express';
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import dotenv from 'dotenv'
+dotenv.config()
 import { body, param, validationResult } from 'express-validator';
 import * as userRepository from '../models/User.js';
 import { isAuth } from '../middleware/auth.js';
@@ -8,7 +10,7 @@ import { isAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 //Make Secure
-const jwtSecretKey = "SecretKey" //process.env.JWT_SECRET;
+const jwtSecretKey = process.env.JWT_SECRET;
 const jwtExpiresInDays = "2d";
 const bcryptSaltRounds = 8;
 
@@ -103,11 +105,43 @@ router.get('/status', isAuth, (req, res) => {
   res.render('user/userStatus', {user})
 })
 
-router.get('/manage', (req, res) => {
-  const users = userRepository.getAll()
-  res.render('user/manageUser', {users})
+// 이용자 관리 페이지 렌더링(유저 정보까지 가져감)
+router.get('/manage', async (req, res) => {
+  const users = await userRepository.getAll()
+  res.render('user/userManage', {users})
 })
 
+// password 리셋
+router.post('/resetPassword', async (req, res) => {
+  const {employeeNumber} = req.body;
+  const user = await userRepository.findByEmployeeNumber(employeeNumber)
+  if(!user){return res.status(400).json({message: '해당 사용자를 찾을 수 없습니다'})}
+  try {
+    const resetPassword = process.env.RESET_PASSWORD
+    const resetEncPassword = await bcrypt.hash(resetPassword, bcryptSaltRounds)
+    let newUser = user
+    newUser.password = resetEncPassword
+    await userRepository.updateUserbyUser(newUser)
+    return res.status(200).json({message:"해당 유저의 패스워드가 초기화 되었습니다"})
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({message:"서버에러 입니다"})
+  }
+})
+
+// 이용자 추방 api
+router.post('/delete', async (req, res) => {
+  const {employeeNumber} = req.body
+  try {
+    await userRepository.deleteByEmployeeNumber(employeeNumber)
+    return res.status(200).json({message:"회원이 추방 되었습니다"})
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({message:'서버에 에러가 생겼습니다 나중에 다시 시도 바랍니다'})
+  }
+
+
+})
 
 
 export default router;
