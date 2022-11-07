@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../public/css/header.css" />
+    <link rel="stylesheet" href="../../public/css/product/rentalList.css" />
+    <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<%- include('../header') -%>
+<body>
+    <h3>대여 리스트</h3>
+    <div class="container">
+        <% rentedProducts.forEach((product) => {%> 
+       <table>
+        <thead>
+            <tr>
+                <th>대분류</th>
+                <th>소분류</th>
+                <th>물품명</th>
+                <th>물품번호</th>
+            </tr>
+            <tr>
+                <td><%= product.category.mainCategory %></td>
+                <td><%= product.category.subCategory %></td>
+                <td><%= product.productName %></td>
+                <td><%= product.productCode %></td>
+            </tr>
+            <tr id="user-Inf"><th colspan="4">대여자 정보</th></tr>
+        </thead>
+        <tbody>
+            <% for(let i=0; i<product.lended.length; i++){ %>
+            <tr>
+                <td><%= product.lended[i].username %></td>
+                <td><%= product.lended[i].reason %></td>
+                <td><%= product.lended[i].issuedate %> ~ <%= product.lended[i].duedate %></td>
+            </tr>
+            <%}%>
+        </tbody>
+        
+       </table>
+    <%})%>
+    </div>
+        <script src="../../public/js/product/rentalList.js"></script>
+</body>
+
+</html>

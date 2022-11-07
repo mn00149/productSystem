@@ -56,3 +56,11 @@ export async function deleteByProductCode(productCode){
 export async function updateByProduct(product) {
   return new Product(product).save().then((data) => data.id);
 }
+
+export async function getAllBeingRented(){
+  return Product.find({"lended":{
+    "$elemMatch":{
+      "returndate":{$exists: false }
+    }
+  }})
+}

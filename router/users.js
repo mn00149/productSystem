@@ -103,6 +103,11 @@ router.get('/status', isAuth, (req, res) => {
   res.render('user/userStatus', {user})
 })
 
+router.get('/manage', (req, res) => {
+  const users = userRepository.getAll()
+  res.render('user/manageUser', {users})
+})
+
 
 
 export default router;

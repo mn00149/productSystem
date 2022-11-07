@@ -254,6 +254,18 @@ router.post('/edit', async (req, res) => {
   res.status(201).json({ message: "물품수정 성공" });
 });
 
+//대여현황(대여중인 물품리스트)
+router.get('/rentalList', async (req, res) => {
+  const products = await productRepository.getAllBeingRented()
+  const rentedProducts = products.map((product) => {
+    product.lended = product.lended.filter((record) => !record.returndate)
+    return product
+  })
+
+  res.render('product/rentalList', {rentedProducts})
+
+})
+
 //물품 삭제 api
 router.post('/delete', async (req, res) => {
   const { productCode } = req.body
