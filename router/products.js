@@ -24,13 +24,7 @@ router.post('/register', async (req, res) => {
   if (!mainCategory) { return res.status(401).json({ message: "Main Category reqiured" }) }
   if (!subCategory) { return res.status(401).json({ message: "Sub Category reqiured" }) }
   const category = { mainCategory, subCategory }
-  const findMainCategory = await categoryRepository.findByMainCategory(mainCategory)
-
-  if (findMainCategory) {
-    await categoryRepository.crateSubCategory(mainCategory, subCategory)
-  } else {
-    await categoryRepository.createCategory(category)
-  }
+  await categoryRepository.crateSubCategory(mainCategory, subCategory)
   // body 값 숫자 제대로 받는 지 확인 할 것
   const findProduct = await productRepository.findByProductCode(productCode)
   if (findProduct) {
@@ -41,6 +35,48 @@ router.post('/register', async (req, res) => {
 
   res.status(201).json({ message: "물품등록 성공" });
 });
+
+//엑셀로 물품등록
+router.post('/register/excel', async (req, res) => {
+  
+  const {data} = req.body
+  console.log(data)
+  try {
+    const products = data.map((product) => {
+      product.대여여부 == "O" ? product.대여여부 = 1 : product.대여여부 = 0
+      product.반납여부 == "O" ? product.반납여부 = 1 : product.반납여부 = 0
+      let newProduct = {
+        mainCategory: product.대분류,
+        subCategory: product.소분류,
+        productName: product.품명,
+        productCode: product.물품번호,
+        rentalAvailability: product.대여여부,
+        returnAvailability: product.반납여부,
+        quantity: product.수량
+      }
+      return newProduct
+    })
+   
+    const categoryList = async (list) => {
+      for (const data of list) {
+        let mainCategory = data.mainCategory
+        let subCategory = data.subCategory
+        await categoryRepository.crateSubCategory(mainCategory, subCategory)
+      }
+    }
+    const registerList = async (list) => {
+      for (const data of list) {
+        await productRepository.createByExcel(data)
+      }
+    }
+    registerList(products)
+    categoryList(products)
+    return res.status(200).json({ messge: "성공적으로 등록 되었습니다" })
+  } catch (error) {
+    res.status(500).json({ message: "에러가 발생했습니다 잠시후 다시 시도 부탁드립니다" })
+  }
+
+})
 
 // 물품 관리 페이지 렌더링
 router.get('/manage', async (req, res) => {
@@ -88,21 +124,19 @@ router.get('/export/excel', async (req, res) => {
   try {
     await workbook.xlsx.writeFile(_filename);  // filename은 임시 파일이므로 어지간하면 겹치지않게 getTime
 
-  res.setHeader("Content-disposition", "attachment; filename=ReviewComment.xlsx"); // 다운받아질 파일명 설정
-  res.setHeader("Content-type", "application/vnd.ms-excel; charset=utf-8"); // 파일 형식 지정
+    res.setHeader("Content-disposition", "attachment; filename=ReviewComment.xlsx"); // 다운받아질 파일명 설정
+    res.setHeader("Content-type", "application/vnd.ms-excel; charset=utf-8"); // 파일 형식 지정
 
-  var filestream = fs.createReadStream(_filename); // readStream 생성
-  filestream.pipe(res); // express 모듈의 response를 pipe에 넣으면 스트림을 통해 다운로드된다.
+    var filestream = fs.createReadStream(_filename); // readStream 생성
+    filestream.pipe(res); // express 모듈의 response를 pipe에 넣으면 스트림을 통해 다운로드된다.
 
-  //fs.unlinkSync(_filename); // 다운했으니 삭제
-  return res.status(200).json({ message: '엑셀로 내보내 졌습니다' })
+    //fs.unlinkSync(_filename); // 다운했으니 삭제
+    return res.status(200).json({ message: '엑셀로 내보내 졌습니다' })
   } catch (error) {
     console.log(e);
-    res.status(400).json({message:'파일을 다운로드하는 중에 에러가 발생하였습니다.'});
+    res.status(400).json({ message: '파일을 다운로드하는 중에 에러가 발생하였습니다.' });
     return;
   }
-  
-
 })
 
 // 물품대여 폼
@@ -262,7 +296,7 @@ router.get('/rentalList', async (req, res) => {
     return product
   })
 
-  res.render('product/rentalList', {rentedProducts})
+  res.render('product/rentalList', { rentedProducts })
 
 })
 

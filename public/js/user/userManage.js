@@ -14,9 +14,21 @@ $('.delete-user-btn').click(function() {
     $.post('/users/delete', {employeeNumber})
      .done((res) => {
         alert('유저가 추방 되었습니다')
+        location.reload()
      })
      .fail((res) => {
         alert(res.responseJSON.message)
      })
 })
+
+function show() {
+   document.querySelector(".background").className = "background show";
+ }
+
+ function close() {
+   document.querySelector(".background").className = "background";
+ }
+
+ document.querySelector("#show").addEventListener("click", show);
+ document.querySelector("#close").addEventListener("click", close);
 

@@ -5,6 +5,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 import { body, param, validationResult } from 'express-validator';
 import * as userRepository from '../models/User.js';
+import * as deletedUserRepository from '../models/DeletedUser.js'
 import { isAuth } from '../middleware/auth.js';
 
 
@@ -35,7 +36,7 @@ const validateRegister = [
     .trim()
     .isLength({ min: 4 })
     .withMessage("password should be at least 4 characters"),
-  body("username").notEmpty().withMessage("nickname is missing"),
+  body("username").notEmpty().withMessage("username is missing"),
   validate,
 ];
 
@@ -47,7 +48,8 @@ router.post('/signup',validateRegister, async (req, res) => {
   if (findEmail) {
     return res.status(409).json({ message: `${email} already exists` });
   }
-
+  const isDeletedUser = await deletedUserRepository.findByEmployeeNumber(employeeNumber)
+  if(isDeletedUser)return res.status(400).json({message:"추방된 이력이 있습니다 관리자에게 문의 해주세요"})
   const findEmployeenumber = await userRepository.findByEmployeeNumber(employeeNumber)
   if (findEmployeenumber) {
     return res.status(409).json({ message: `${employeeNumber} already exists` });
@@ -139,8 +141,15 @@ router.post('/delete', async (req, res) => {
     console.log(error)
     return res.status(500).json({message:'서버에 에러가 생겼습니다 나중에 다시 시도 바랍니다'})
   }
+})
 
-
+//권한 수정 api
+router.post('/edit/rigth', async (req, res) => {
+  const {employeeNumber, rigth} = req.body
+  let user = await userRepository.findByEmployeeNumber(employeeNumber)
+  user.right = rigth
+  await userRepository.updateUserbyUser(user)
+  
 })
 
 

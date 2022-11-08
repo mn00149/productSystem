@@ -11,9 +11,9 @@ const userSchema = new Mongoose.Schema({
   department: String, // 부서명
   employeeNumber: Number, // 사번, unique
   role: { type: String, default: 'nomal' }, //직책,
-  right: { type: String, default: 'open' }, //권한 (등록, 열람, 편집, 대여)
-  lending: {type: Array, default: []},
-},{timestamps:true});
+  right: { type: Array, default: ['open'] }, //권한 (등록, 열람, 편집, 대여)
+  lending: { type: Array, default: [] },
+}, { timestamps: true });
 
 useVirtualId(userSchema);
 const User = Mongoose.model('User', userSchema);
@@ -46,20 +46,24 @@ export async function getAll() {
   return User.find({});
 }
 
-export async function updateLendingByProduct_id(product_id, data){
+export async function updateLendingByProduct_id(product_id, data) {
 
-  return User.update({'lending.product_id':product_id},
-  {'$set':{
-    'lending.$.mainCategory':data.mainCategory,
-    'lending.$.subCategory':data.subCategory,
-    'lending.$.productCode':data.productCode,
-    'lending.$.productName':data.productName
-  }
+  return User.update({ 'lending.product_id': product_id },
+    {
+      '$set': {
+        'lending.$.mainCategory': data.mainCategory,
+        'lending.$.subCategory': data.subCategory,
+        'lending.$.productCode': data.productCode,
+        'lending.$.productName': data.productName
+      }
+    }
+  )
 }
-)}
 
-export async function deleteByEmployeeNumber(employeeNumber){
-  const deletedUser = await User.findOneAndDelete({employeeNumber})
+export async function deleteByEmployeeNumber(employeeNumber) {
+  const deletedUser = await User.findOneAndDelete({ employeeNumber })
   return await deletedUserRepository.create(deletedUser)
 }
+
+
 

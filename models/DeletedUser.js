@@ -17,3 +17,7 @@ export async function create(deletedUser) {
       lending: deletedUser.lending
     }).save().then((data) => data.id);
 }
+
+export async function findByEmployeeNumber(employeeNumber){
+  return DeletedUser.findOne({employeeNumber})
+}

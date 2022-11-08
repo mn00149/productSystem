@@ -55,13 +55,16 @@
                 <input id="quantity" type="number">
             </div>
             <div class="form-control">
-                <button>엑셀</button>
+                <input type="file" id="import-excel">엑셀</input>
+                <button id="excel-down-btn">엑셀양식 다운</button>
                 <button type="button" id="register-btn">등록</button>
                 <button>취소</button>
+                <button type="button" id="test"></button>
             </div>
         </div>
         
     </container>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
     <script type="module" src="../public/js/productRegister.js"></script>
 
 </body>

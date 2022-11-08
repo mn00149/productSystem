@@ -64,3 +64,24 @@ export async function getAllBeingRented(){
     }
   }})
 }
+
+export async function createByExcel(product) {
+  
+await Product.findOneAndUpdate(
+  {productCode: product.productCode},
+  {
+    productName: product.productName,
+    productCode: product.productCode,
+    rentalAvailability: product.rentalAvailability,
+    returnAvailability: product.returnAvailability,
+    category: {
+      mainCategory: product.mainCategory,
+      subCategory: product.subCategory
+    },
+    
+    quantity: product.quantity
+  },
+  { upsert: true, new: true }
+  ).exec()
+  return 
+}

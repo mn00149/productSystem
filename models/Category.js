@@ -23,7 +23,7 @@ export async function createCategory(category){
 }
 
 export async function crateSubCategory(mainCategory, subCategory){
-    return Category.findOneAndUpdate({mainCategory}, {$addToSet:{subCategory}})
+    return Category.findOneAndUpdate({mainCategory}, {$addToSet:{subCategory}}, {upsert: true})
 }
 
 export async function getAll(){

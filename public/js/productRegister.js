@@ -6,6 +6,7 @@ let subCategory = $('#select-sub')
 let subCategoryInput = $('.sub-category-input')
 let productCodeInput = $('#product-code')
 let productNameInput = $('#product-name')
+let dataFromExcel = {}
 
 $(document).ready(function () {
     $.get('/category').done((res) => {
@@ -99,6 +100,12 @@ $('.reset-btn').click(function(){
     reset([mainCategoryInput, subCategoryInput, productCodeInput, productNameInput ])
 })
 
+$('#excel-down-btn').click(function(){
+    $.get('/excelForm')
+    .done((res) => alert(res.message))
+    .fail((res) => alert(res.responseJSON.message))
+})
+
 function reset(arr) {
     for (let i = 0; i < arr.length; i++) {
         arr[i].val('');
@@ -109,3 +116,35 @@ function reset(arr) {
     $('#quantity').val('1')
     $('#return-true').prop('checked', true)
 }
+
+$('#import-excel').change(function() {
+    let input = this
+    let reader = new FileReader();
+    reader.onload = function () {
+        let data = reader.result;
+        let workBook = XLSX.read(data, { type: 'binary' });
+        workBook.SheetNames.forEach(function (sheetName) {
+            console.log('SheetName: ' + sheetName);
+            let rows = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName]);
+            console.log(JSON.stringify(rows));
+            dataFromExcel = rows
+        })
+    };
+    let test = reader.readAsBinaryString(input.files[0]);
+    console.log(test)
+})
+
+$('#test').click(function(){
+    let data = [] 
+    dataFromExcel.forEach((i) => {
+        data.push(i)
+    })
+    $.post('/products/register/excel', {data})
+    .done((res) => {
+        console.log(res)
+        alert(res.message)
+    })
+    .fail((res) => alert(res.responseJSON.message))
+})
+
+
