@@ -144,13 +144,20 @@ router.post('/delete', async (req, res) => {
 })
 
 //권한 수정 api
-router.post('/edit/rigth', async (req, res) => {
-  const {employeeNumber, rigth} = req.body
+router.post('/edit/right', async (req, res) => {
+  const {employeeNumber, right} = req.body
+  console.log(right)
   let user = await userRepository.findByEmployeeNumber(employeeNumber)
-  user.right = rigth
+  user.right = right
   await userRepository.updateUserbyUser(user)
-  
+  res.status(200).json({message:"권한이 수정 되었습니다"})
 })
 
+//사번으로 이용자조회 api
+router.get('/info/:employeeNumber', async(req, res) => {
+  const employeeNumber = req.params.employeeNumber
+  const user = await userRepository.findByEmployeeNumber(employeeNumber)
+  res.status(200).json(user)
+})
 
 export default router;

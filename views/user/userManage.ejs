@@ -24,22 +24,30 @@
                         <li><strong>권한:</strong> <%= users[i].right %></li>
                     </ul>
                     <div class="btn-list">
-                        <button class="delete-user-btn" value="<%=users[i].employeeNumber%>" type="button">추방</button>
-                        <button class="edit-rigth-btn" value="<%=users[i].employeeNumber%>" type="button">권한수정</button>
-                        <button class="reset-password-btn" value="<%=users[i].employeeNumber%>" type="button">password 초기화</button>
+                        <button id="delete-user-btn" class="btn" value="<%=users[i].employeeNumber%>" type="button">추방</button>
+                        <button id="edit-right-btn" class="btn edit-right-btn" value="<%=users[i].employeeNumber%>" type="button">권한수정</button>
+                        <button id="reset-password-btn" class="btn" value="<%=users[i].employeeNumber%>" type="button">password 초기화</button>
                     </div>
                 </div>
             <%}%>
             </div>
         </div>
-        <button id="show">팝업열기</button>
+<!-------------------------------------------- 권한수정 팝업 --------------------------->
         <div class="background">
           <div class="window">
             <div class="popup">
-              <button id="close">팝업닫기</button>
-            </div>
-            <div>
-              <div></div>
+              <h2>권한 수정</h3>
+              <h3 id="popup-employeeNumber">3311445668</h3>
+              <div id="check-right">
+                <span>열람</span><input type="checkbox" value="open" name="right" id="open">
+                <span>등록</span><input type="checkbox" value="register" name="right" id="register">
+                <span>편집</span><input type="checkbox" value="edit" name="right" id="edit">
+                <span>대여</span><input type="checkbox" value="rent" name="right" id="rent">
+              </div>
+              <div class="poup-btns">
+                <button id="register-rigth">수정</button>
+                <button id="close">팝업닫기</button>
+              </div>
             </div>
           </div>
         </div>

@@ -71,7 +71,7 @@ router.post('/register/excel', async (req, res) => {
     }
     registerList(products)
     categoryList(products)
-    return res.status(200).json({ messge: "성공적으로 등록 되었습니다" })
+    return res.status(200).json({ message: "성공적으로 등록 되었습니다" })
   } catch (error) {
     res.status(500).json({ message: "에러가 발생했습니다 잠시후 다시 시도 부탁드립니다" })
   }

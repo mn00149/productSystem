@@ -1,4 +1,5 @@
-$('.reset-password-btn').click(function() {
+let popupEmployeeNum = $('#popup-employeeNumber')
+$('#reset-password-btn').click(function() {
     const employeeNumber = $(this).val()
     $.post('/users/resetPassword', {employeeNumber})
      .done((res) => {
@@ -9,10 +10,10 @@ $('.reset-password-btn').click(function() {
      })
 })
 
-$('.delete-user-btn').click(function() {
+$('#delete-user-btn').click(function() {
     const employeeNumber = $(this).val()
     $.post('/users/delete', {employeeNumber})
-     .done((res) => {
+     .done(() => {
         alert('유저가 추방 되었습니다')
         location.reload()
      })
@@ -29,6 +30,36 @@ function show() {
    document.querySelector(".background").className = "background";
  }
 
- document.querySelector("#show").addEventListener("click", show);
- document.querySelector("#close").addEventListener("click", close);
+ $(".edit-right-btn").click(function(){
+   const employeeNumber = $(this).val()
+   show()
+   popupEmployeeNum.text(employeeNumber)
+   $.get("/users/info/"+employeeNumber)
+    .done((res) => {
+      res.right.forEach(right => {
+         let id = "#" + right
+         $(id).prop('checked', true);
+      });
+    })
+ })
+
+ $("#register-rigth").click(function(){
+   let chkList = []
+   $('input[type="checkbox"][name="right"]:checked').each(function(){
+      let chk = $(this).val()
+      chkList.push(chk)
+   })
+   let data = {
+      right: chkList,
+      employeeNumber:(popupEmployeeNum.text()).trim()
+   }
+   $.post('/users/edit/right', data)
+   .done(() => alert('성공'))
+   .fail(() => alert("실패"))
+ })
+
+ document.querySelector("#close").addEventListener("click", function(){
+   close()
+   $('input[type="checkbox"][name="right"]').prop('checked', false);
+ });
 
