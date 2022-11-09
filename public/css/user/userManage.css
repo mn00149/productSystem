@@ -8,44 +8,84 @@
 }
 
 .container{
- border: 1px solid black;
+ /* border: 1px solid black; */
+ margin-top: 10px;
+ border-radius: 10px;
  width: 80%;
  display: flex;
  flex-direction: column;
+ background-color:whitesmoke;
+padding: 5px 0 15px 0;
 
  align-items: center;
 }
 
 .user-card{
+    padding: 60px auto;  
+    border: 1px solid black;
+    margin-top: 10px;
     display: flex;
     justify-content: center;
-    border: 1px solid red;
-    height: 300px;
+    height: 260px;
     width: 60%;  
-    font-size: 22px;  
+    font-size: 22px; 
+    border-radius: 10px;
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3); 
 }
 
 .userInfo-list {
     display: flex;
     flex-direction: column;
     align-items:flex-start;
-    border: 1px solid blue;
+    justify-content: space-around;
+    /* border: 1px solid blue; */
     margin-right: 30px;
     width: 500px;
     
 }
 
+.depart-role{
+  display: flex;
+  justify-content: flex-start;
+}
+
+.username {
+
+}
+
+.line{
+  margin: 0 auto;
+  height: 2px;
+  width: 90%;
+  border: 1px solid rgb(155, 149, 149) ;
+}
+/* ---------------------------버튼 css----------------------------- */
 .btn-list{
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    border: 1px solid gold;
     width: 35%;
 }
 
 .btn-list button{
     font-size: 25px;
+    font-weight: normal;
     padding: 5px;
+    border: none;
+    color: whitesmoke;
+    box-shadow: 3px 3px 3px 3px grey;
+}
+
+.red{
+  background-color: red;
+}
+
+.purple{
+  background-color: blueviolet;
+}
+
+.green{
+  background-color: rgb(61, 116, 7);
 }
 
 /* -------------------------------------모달창 관련 css------------------------------------------ */

@@ -53,9 +53,12 @@ function show() {
       right: chkList,
       employeeNumber:(popupEmployeeNum.text()).trim()
    }
+
    $.post('/users/edit/right', data)
-   .done(() => alert('성공'))
+   .done(() => alert('권한이 수정되었습니다'))
    .fail(() => alert("실패"))
+
+   close()
  })
 
  document.querySelector("#close").addEventListener("click", function(){

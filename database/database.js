@@ -18,4 +18,3 @@ export function useVirtualId(schema) {
   schema.set('toOject', { virtuals: true });
 }
 
-// todo(Bob): Delete Below!!

@@ -16,17 +16,23 @@
             <div class="container">
                 <% for(let i=0; i<users.length; i++){%>
                 <div class="user-card">
-                    <ul class="userInfo-list">
-                        <li><strong>이름:</strong> <%= users[i].username %></li>
-                        <li><strong>부서:</strong> <%= users[i].department %></li>
-                        <li><strong>직책:</strong> <%= users[i].role %></li>
-                        <li><strong>이메일:</strong> <%= users[i].email %></li>
-                        <li><strong>권한:</strong> <%= users[i].right %></li>
-                    </ul>
+                    <div class="userInfo-list">
+                      <div class="userInfo-top">
+                        <div class="username"><h2><%= users[i].username %></h2> </div>
+                        <div class="depart-role">
+                          <div class="department"><%= users[i].department %></div>
+                          <span> / </span>
+                          <div class="role"><%= users[i].role %></div>
+                        </div>
+                      </div>
+                      <div class="line"></div>
+                        <div><strong>e-mail:</strong> <%= users[i].email %></div>
+                        <div><strong>권한:</strong> <%= users[i].right %></div>
+                    </div>
                     <div class="btn-list">
-                        <button id="delete-user-btn" class="btn" value="<%=users[i].employeeNumber%>" type="button">추방</button>
-                        <button id="edit-right-btn" class="btn edit-right-btn" value="<%=users[i].employeeNumber%>" type="button">권한수정</button>
-                        <button id="reset-password-btn" class="btn" value="<%=users[i].employeeNumber%>" type="button">password 초기화</button>
+                        <button id="delete-user-btn" class="btn red" value="<%=users[i].employeeNumber%>" type="button">추방</button>
+                        <button id="edit-right-btn" class="btn purple edit-right-btn" value="<%=users[i].employeeNumber%>" type="button">권한수정</button>
+                        <button id="reset-password-btn" class="btn green" value="<%=users[i].employeeNumber%>" type="button">password 초기화</button>
                     </div>
                 </div>
             <%}%>

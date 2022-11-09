@@ -101,7 +101,7 @@ router.post('/signin',async (req, res) => {
 function createJwtToken(employeeNumber) {
   return jwt.sign({ employeeNumber }, jwtSecretKey, { expiresIn: jwtExpiresInDays });
 }
-//나의 현황 페이지렌더링
+//이용자 현황 페이지렌더링
 router.get('/status', isAuth, (req, res) => {
   const user = req.user
   res.render('user/userStatus', {user})
@@ -109,8 +109,9 @@ router.get('/status', isAuth, (req, res) => {
 
 // 이용자 관리 페이지 렌더링(유저 정보까지 가져감)
 router.get('/manage', async (req, res) => {
+  const user = req.user
   const users = await userRepository.getAll()
-  res.render('user/userManage', {users})
+  res.render('user/userManage', {users, user  })
 })
 
 // password 리셋

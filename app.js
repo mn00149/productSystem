@@ -39,11 +39,13 @@ app.get('/', (req, res) => {
 });
 //회원가입 페이지
 app.get('/signupForm', (req, res) => {
-   res.render('signupForm')
+  const user = req.user
+   res.render('signupForm', {user})
  });
 
  app.get('/signinForm', (req, res) => {
-  res.render('signinForm')
+  const user = req.user
+  res.render('signinForm', {user})
 });
 
 //isAut 미들웨어 테스트 api

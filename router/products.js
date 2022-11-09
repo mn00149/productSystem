@@ -14,7 +14,8 @@ router.get('/', async (req, res) => {
 });
 //물품등록 폼 화면 호출 api
 router.get('/register', async (req, res) => {
-  res.render('productRegister')
+  const user = req.user
+  res.render('productRegister', {user})
 })
 //물품등록 api
 router.post('/register', async (req, res) => {
@@ -80,7 +81,8 @@ router.post('/register/excel', async (req, res) => {
 
 // 물품 관리 페이지 렌더링
 router.get('/manage', async (req, res) => {
-  res.render('productManage')
+  const user = req.user
+  res.render('productManage', {user})
 })
 
 //물품 리스트 불러오는 api
@@ -290,13 +292,14 @@ router.post('/edit', async (req, res) => {
 
 //대여현황(대여중인 물품리스트)
 router.get('/rentalList', async (req, res) => {
+  const user = req.user
   const products = await productRepository.getAllBeingRented()
   const rentedProducts = products.map((product) => {
     product.lended = product.lended.filter((record) => !record.returndate)
     return product
   })
 
-  res.render('product/rentalList', { rentedProducts })
+  res.render('product/rentalList', { rentedProducts, user })
 
 })
 

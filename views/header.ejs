@@ -1,11 +1,28 @@
-        <div class="Nav">
-            <ul>
-                <li><a href="/products/register" class="navChild">물품등록</a></li>
-                <li><a href="/products/manage" class="navChild">물품관리</a></li>
-                <li><a href="/products/rentalList" class="navChild">대여현황</a></li>
-                <li><a href="/users/status" class="navChild">나의 현황</a></li>
-                <li><a href="/users/manage" class="navChild">이용자 관리</a></li>
-                <li><a href="/users/logout" class="navChild">Logout</a></li>
-            </ul>            
-        </div>
+     <header>
+        <nav>
+            <div class="logo">
+                <img src="/public/image/헤븐트리 로고_가로긴거.png" alt="">
+            </div>
+            <div class="gnb">
+                <a href="/products/register" class="navChild">물품등록</a>
+                <a href="/products/manage" class="navChild">물품관리</a>
+                <a href="/products/rentalList" class="navChild">대여현황</a>
+                <a href="/users/status" class="navChild">나의 현황</a>
+                <a href="/users/manage" class="navChild">이용자 관리</a>
+            </div>
+            <div class="lnb">
+                <% if(!user) { %>
+                    <a href="/signinForm">로그인</a>
+                    <a href="/signupForm">계정생성</a>
+                <% }else { %>
+                    <a href="/users/logout" class="navChild">Logout</a>
+                <%}%>
+            </div>
+        </nav>
+     </header>
+         
+
+            
+                      
+ 
     
