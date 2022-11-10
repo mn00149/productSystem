@@ -24,6 +24,7 @@ router.post('/register', async (req, res) => {
   // 프런트단에서도 대분류 소분류 기본값주도록 필요시 설정
   if (!mainCategory) { return res.status(401).json({ message: "Main Category reqiured" }) }
   if (!subCategory) { return res.status(401).json({ message: "Sub Category reqiured" }) }
+  if(!productCode){return res.status(401).json({message: "물품번호를 입력 바랍니다"})}
   const category = { mainCategory, subCategory }
   await categoryRepository.crateSubCategory(mainCategory, subCategory)
   // body 값 숫자 제대로 받는 지 확인 할 것

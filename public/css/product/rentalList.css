@@ -1,22 +1,115 @@
-*{
-    box-sizing: border-box;
-}
 
 .container{
-    width: 100%;
+    border-radius: 10px;
+    width: 80%;
+    margin: 10px auto 0;
+    padding: 10px;
+    background-color: whitesmoke;
+}
+
+.product-card{
+    border-radius: 10px;
+    padding: 10px;
+}
+
+
+.row{
     border: 1px solid black;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    border-bottom: 0px;
 }
 
-table {
-    border-collapse: collapse;
-    width: 80%;
-    border: 1px solid rgb(91, 31, 223);
+.category{
+    display: flex;
+    width: 100%;
 }
 
-tbody > tr th{
-    text-align: left;
+.category .main{
+    width: 35%;
 }
+
+.category .sub{
+    width: 35%;
+}
+
+.category .content{
+    width: 65%;
+}
+
+.product-info{
+    width: 35%;
+}
+
+.product .content{
+    width: 100%;
+}
+
+.person-title{
+    display: flex;
+    justify-content: center;
+}
+
+div{
+    text-align: center;
+}
+
+table{
+    border: 1px solid black;
+    border-top: 0px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+th, td{
+    width: 33%;
+}
+
+.table-section{
+    display: none;
+}
+
+.show{
+    display: block;
+}
+
+.content{
+    background-color: white;
+}
+
+.main, .sub, .product-info, #table-btn{
+    font-weight: bold;
+    background-color: lightgrey;
+}
+
+button{
+    width: 100%;
+    border: 1px solid black;
+    margin-bottom: 0px;
+}
+
+.margin-top{
+    margin-top: 15px;
+}
+
+.margin-bottom{
+    margin-bottom: 20px;
+}
+
+.up, .down{
+    display: none;
+}
+
+.inline-block{
+    display: inline-block;
+}
+
+/* 대여자 테이블에 보더 넣을지는 고민 */
+/* td{
+    border-top: 1px solid black;
+} */
+
+
+
+
+
 

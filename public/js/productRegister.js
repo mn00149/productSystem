@@ -118,6 +118,8 @@ function reset(arr) {
 }
 
 $('#import-excel').change(function() {
+    let fileName = $("#import-excel").val();
+    $(".upload-name").val(fileName);
     let input = this
     let reader = new FileReader();
     reader.onload = function () {

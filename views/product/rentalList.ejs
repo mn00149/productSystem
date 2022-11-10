@@ -12,37 +12,53 @@
 </head>
 <%- include('../header') -%>
 <body>
-    <h3>대여 리스트</h3>
     <div class="container">
         <% rentedProducts.forEach((product) => {%> 
-       <table>
-        <thead>
-            <tr>
-                <th>대분류</th>
-                <th>소분류</th>
-                <th>물품명</th>
-                <th>물품번호</th>
-            </tr>
-            <tr>
-                <td><%= product.category.mainCategory %></td>
-                <td><%= product.category.subCategory %></td>
-                <td><%= product.productName %></td>
-                <td><%= product.productCode %></td>
-            </tr>
-            <tr id="user-Inf"><th colspan="4">대여자 정보</th></tr>
-        </thead>
-        <tbody>
-            <% for(let i=0; i<product.lended.length; i++){ %>
-            <tr>
-                <td><%= product.lended[i].username %></td>
-                <td><%= product.lended[i].reason %></td>
-                <td><%= product.lended[i].issuedate %> ~ <%= product.lended[i].duedate %></td>
-            </tr>
-            <%}%>
-        </tbody>
-        
-       </table>
-    <%})%>
+        <div class="product-card margin-bottom">
+            <div class="row">
+                <div class="category">
+                    <div class="main">대분류</div>
+                    <div class="content"><%= product.category.mainCategory %></div>
+                </div>
+                <div class="category">
+                    <div class="sub">소분류</div>
+                    <div class="content"><%= product.category.subCategory %></div>
+                </div>
+            </div>
+            <div class="row product">
+                <div class="product-info">물품명</div>
+                <div class="content"><%= product.productName %></div>
+            </div>
+            <div class="row product">
+                <div class="product-info">물품번호</div>
+                <div class="content"><%= product.productCode %></div>
+            </div>
+            <button id="table-btn"  onclick="test(this)" type="button">대여자 정보<span class="up inline-block">▲</span><span class="down">▼</span></button>
+            <div class="table-section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>대여자</th>
+                            <th>대여일</th>
+                            <th>대여사유</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let i=0; i<product.lended.length; i++){ %>
+                        <tr>
+                            <td><%= product.lended[i].username %></td>
+                            <td><%= product.lended[i].issuedate %></td>
+                            <td><%= product.lended[i].reason %></td>
+                        </tr>
+                        <%}%>
+
+                    </tbody>
+                </table>
+    
+            </div>
+        </div>
+        <%})%>
+
     </div>
         <script src="../../public/js/product/rentalList.js"></script>
 </body>

@@ -2,10 +2,12 @@
     box-sizing: border-box;
 }
 
-img{
+.icon-size {
     width: 20px;
     height: 20px;
 }
+
+
 
 .container{
     width: 100%;
