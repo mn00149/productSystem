@@ -81,7 +81,7 @@ th, td{
     background-color: lightgrey;
 }
 
-button{
+.product-card button{
     width: 100%;
     border: 1px solid black;
     margin-bottom: 0px;

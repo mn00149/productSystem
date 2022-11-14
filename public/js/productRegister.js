@@ -95,14 +95,14 @@ $('#register-btn').click(function () {
             console.log(res)
         })
 })
-
+//리셋버튼
 $('.reset-btn').click(function(){
     reset([mainCategoryInput, subCategoryInput, productCodeInput, productNameInput ])
 })
-
+//엑셀폼 단운
 $('#excel-down-btn').click(function(){
     $.get('/excelForm')
-    .done((res) => alert(res.message))
+    .done((res) => {console.log(res.message); alert("엑셀 양식이 다운로드 되었습니다")})
     .fail((res) => alert(res.responseJSON.message))
 })
 
@@ -137,16 +137,24 @@ $('#import-excel').change(function() {
 })
 
 $('#test').click(function(){
-    let data = [] 
-    dataFromExcel.forEach((i) => {
-        data.push(i)
-    })
-    $.post('/products/register/excel', {data})
-    .done((res) => {
-        console.log(res)
-        alert(res.message)
-    })
-    .fail((res) => alert(res.responseJSON.message))
+    if(Object.keys(dataFromExcel).length  == 0){alert('엑셀 파일을 선택해주세요')}
+    else{
+        console.log(dataFromExcel)
+        let data = [] 
+        dataFromExcel.forEach((i) => {
+
+
+            
+            data.push(i)
+        })
+        $.post('/products/register/excel', {data})
+        .done((res) => {
+            alert(res.message)
+            location.reload()
+        })
+        .fail((res) => alert(res.responseJSON.message))
+    }
+    
 })
 
 

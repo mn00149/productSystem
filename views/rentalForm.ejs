@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../public/css/rentalForm.css" />
+    <!-- <link rel="stylesheet" href="../public/css/rentalForm.css" /> -->
+    <link rel="stylesheet" href="../../public/css/rentalForm.css" />
     <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
     <title>Document</title>
 </head>
@@ -16,39 +17,49 @@
             <div class="form-header">
                 <h2>물품대여</h2>
             </div>
+            <!-- <div class="line"></div> -->
             <div class="form-body">
-                <ul>
-                    <li>
-                        <p class="sub-title">물품: <span>
-                                <%=product.productName%>
-                            </span></p>
-                    </li>
-                    <li>
-                        <p class="sub-title">물품코드: <span id="product-code">
-                                <%=product.productCode%>
-                            </span></p>
-                    </li>
-                    <li>
-                        <p class="sub-title">잔여 수량:<span>
-                                <%=product.quantity%>
-                            </span></p>
-                    </li>
-                    <li>
-                        <p class="sub-title">대여 목적:</p> <input id="reason-input" type="text">
-                    </li>
-                    <% if(product.returnAvailability == 1) {%>
-                    <li>
-                        <p>대여기간 설정</p>
-                        <input class="date-local" id="rental-start" type="datetime-local">
-                        ~
-                        <input class="date-local" id="rental-end" type="datetime-local">
-                    </li>
-                <% } %>
-                </ul>
-                <div class="btns">
-                    <button type="button" id="rental-btn">대여</button>
-                    <button type="button" id="cancle-btn">취소</button>
+                <div class="form-row">
+                    <div class="sub-title"><strong>물품</strong> </div>
+                    <span>
+                        <%=product.productName%>
+                    </span>
                 </div>
+                <div class="form-row">
+                    <div class="sub-title"><strong>물품코드</strong></div>
+                    <span id="product-code">
+                        <%=product.productCode%>
+                    </span>
+                </div>
+                <div class="form-row">
+                    <div class="sub-title"><strong>잔여 수량</strong></div>
+                    <span>
+                        <%=product.quantity%>
+                    </span>
+                </div>
+                <div class="form-row">
+                    <div class="sub-title"><strong>대여 목적</strong></div> 
+                    <input id="reason-input" type="text">
+                </div>
+                <% if(product.returnAvailability==1) {%>
+                    <div class="form-row">
+                        <div class="sub-title"><strong>대여기간 설정</strong></div>
+                        <div id="set-period">
+                            <div>
+                               <input class="date-local" id="rental-start" type="datetime-local">
+                            </div>
+                            <div style="text-align: center;">~</div>
+                            <div>
+                                <input class="date-local" id="rental-end" type="datetime-local">
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+
+                        <div class="btns">
+                            <button class="red" onclick="onunload()" type="button" id="cancle-btn">취소</button>
+                            <button class="green" type="button" id="rental-btn">대여</button>
+                        </div>
             </div>
         </div>
     </div>
@@ -70,6 +81,10 @@
                 .fail((res) => {
                     alert(res.responseJSON.message)
                 })
+        })
+
+        $("#cancle-btn").click(function(){
+            self.close()
         })
 
         var now_utc = Date.now() // 지금 날짜를 밀리초로

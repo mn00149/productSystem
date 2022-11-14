@@ -13,76 +13,95 @@
 <body>
     <container class="container">
         <div class="register-form">
-            <div class="form-control">
+            <div class="form-control head-line">
                 <h3>물품 수정</h3>
-                <button class="reset-btn"><img width="20px" height="20px" src="../../public/image/reset.png" alt="#"></button>
             </div>
-            <div class="form-control">
-                <p>대분류:</p>
-                <input type="text" class="main-category-input">
-                <select name="" id="select-main">
-                    <option value="0">직접입력</option>
-                </select>
+            <div class="category">
+                <div class="form-control">
+                    <div>
+                        <div class="grey padding">
+                            <strong>대분류</strong>
+                        </div>
+                        <div class="main-category">
+                            <select class="padding" name="" id="select-main">
+                                <option value="0">직접입력</option>
+                            </select>
+                            <input type="text" class="main-category-input">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-control">
+                    <div>
+                        <div class="grey border-left padding">
+                            <strong>소분류</strong>
+                        </div>
+                        <div class="sub-category">
+                            <select class="padding" name="" id="select-sub">
+                                <option value="0">직접입력</option>
+                            </select>
+                            <input type="text" class="sub-category-input">
+                        </div>
+                    </div>
+                </div>
             </div>
+
             <div class="form-control">
-                <p>소분류:</p>
-                <input type="text" class="sub-category-input">
-                <select name="" id="select-sub">
-                    <option value="0">직접입력</option>
-                </select>
+                <div class="product-name-section">
+                    <div class="grey padding"><strong>물품명</strong></div>
+                    <input id="product-name" type="text">
+                </div>
             </div>
-            <div class="form-control">
-                <p>물품명</p>
-                <input id="product-name" type="text">
-            </div>
-            <div class="form-control">
-                <p>대여가능 여부</p>
+            <div class="form-control padding">
+                <p><strong>대여가능 여부</strong></p>
                 가능: <input type="checkbox" name="rent-avl" value="1" id="rent-true">
                 불가: <input type="checkbox" name="rent-avl" value="0" id="rent-false">
             </div>
-            <div class="form-control">
-                <p>반환 여부</p>
+            <div class="form-control padding">
+                <p><strong>반환 여부</strong></p>
                 필요: <input type="checkbox" name="return-avl" value="1" id="return-true">
                 불필요: <input type="checkbox" name="return-avl" value="0" id="return-false">
             </div>
-            <div class="form-control">
-                <p>제품코드:</p>
+            <div class="form-control product-code-section">
+                <div class="grey padding"><strong>물품번호</strong></div>
                 <input id="product-code" type="text">
             </div>
-            <div class="form-control">
-                <p>수량:</p>
+            <div class="form-control quantity-section">
+                <div class="grey padding"><strong>수량</strong></div>
                 <input id="quantity" type="number">
             </div>
-            <div class="form-control">
-                <button type="button" id="register-btn">등록</button>
-                <button type="button" onclick="window.close()" id="cancel-btn">취소</button>
+            <div class="form-control register-btns">
+                <button class="reset-btn purple"><img width="20px" height="20px" src="../../public/image/reset.png"
+                        alt="#"></button>
+                <button class="green" type="button" id="register-btn">수정</button>
+                <button class="red" type="button" onclick="window.close()" id="cancel-btn">취소</button>
             </div>
         </div>
-        
+
     </container>
-       <div class="hideInfo" id="hidecode">
+    <div class="hideInfo" id="hidecode">
         <%= product.productCode %>
-       </div>
-       <div class="hideInfo" id="hidemain">
+    </div>
+    <div class="hideInfo" id="hidemain">
         <%= product.category.mainCategory %>
-       </div>
-       <div class="hideInfo" id="hidesub">
+    </div>
+    <div class="hideInfo" id="hidesub">
         <%= product.category.subCategory %>
-       </div>
-       <div class="hideInfo" id="hidename">
+    </div>
+    <div class="hideInfo" id="hidename">
         <%= product.productName %>
-       </div>
-       <div class="hideInfo" id="hidereturn">
+    </div>
+    <div class="hideInfo" id="hidereturn">
         <%= product.returnAvailability %>
-       </div>
-       <div class="hideInfo" id="hiderental">
+    </div>
+    <div class="hideInfo" id="hiderental">
         <%= product.rentalAvailability %>
-       </div>
-       <div class="hideInfo" id="hidequan">
+    </div>
+    <div class="hideInfo" id="hidequan">
         <%= product.quantity %>
-       </div>
-         
-        <script src="../../public/js/product/productEdit.js"></script>
+    </div>
+
+    <script src="../../public/js/product/productEdit.js"></script>
 </body>
 
 </html>

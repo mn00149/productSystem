@@ -228,8 +228,11 @@ searchBtn.click(function () {
 })
 //엑셀로 내보내기
 $('#export-btn').click(() => {
-    $.get('/products/export/excel')
-    .done((res) => alert(res.message))
+    $.getJSON('/products/export/excel')
+    .done((res) => {
+        alert(res.message)
+        console.log(typeof res)
+    })
     .fail(() => {alert('다운로드중 에러가 발생 했습니다 에러가 지속될 경우 관리자에게 문의 바랍니다')})
 })
 
@@ -240,8 +243,10 @@ $(document).on("click", "#delete-btn", function(){
 });
 
 $(document).on("click", "#rental-btn", function(){   
-    window.open('/products/rentalForm/'+$(this).val(),'rentalform popup', 'width=700px,height=800px,scrollbars=yes')
+     const retalFormPopup = window.open('/products/rentalForm/'+$(this).val(),'rentalform popup', 'width=700px,height=800px,scrollbars=yes')
 });
+
+
 
 $(document).on("click", "#user-list", function(){   
     window.open('/products/usersInf/'+$(this).val(),'user-list form popup', 'width=700px,height=800px,scrollbars=yes')
@@ -252,6 +257,13 @@ $(document).on("click", "#rental-record", function(){
 });
 
 $(document).on("click", "#edit-btn", function(){   
-    window.open('/products/edit/'+$(this).val(),'product edit form popup', 'width=700px,height=800px,scrollbars=yes')
+    const edintFormPopup = window.open('/products/edit/'+$(this).val(),'product edit form popup', 'width=700px,height=800px,scrollbars=yes')
+    edintFormPopup.addEventListener('beforeunload', function(e){
+        console.log(e)
+        if($('#chkEdit').val() == 1){
+            window.location.reload()
+            $('#chkEdit').val() = '0'
+        } 
+     });
 });
 

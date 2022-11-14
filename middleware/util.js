@@ -23,3 +23,4 @@ export function getDate(){
     const registerDate = koreaNow.toISOString().replace("T", " ").split('.')[0]
     return registerDate
 }
+

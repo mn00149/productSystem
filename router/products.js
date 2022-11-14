@@ -109,7 +109,7 @@ router.get('/export/excel', async (req, res) => {
     excelData.push([category.mainCategory, category.subCategory, productName, productCode, rentalQuantity, quantity, rentalAvailability, returnAvailability, registerDate]);
 
   }
-  sheet.mergeCells('A1:J1');
+  sheet.mergeCells('A1:I1');
   sheet.getCell('A1').value = '물품 리스트';
   sheet.getCell('A1').font = { size: 14, bold: true };
   sheet.getCell('A1').alignment = { horizontal: 'center' };
@@ -120,6 +120,9 @@ router.get('/export/excel', async (req, res) => {
     bgColor: { argb: 'FF0000FF' },
   };
   sheet.getRow(2).values = ['대분류', '소분류', '품명', '물품번호', '대여중', '잔여수', '대여여부', '반납여부', '등록일'];
+  sheet.getRow(2).font = { size: 10, bold: true };
+  sheet.getRow(2).alignment = { horizontal: 'center' };
+
   // 엑셀 리스트 삽입
   sheet.addRows(excelData);
 

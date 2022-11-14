@@ -11,56 +11,73 @@
     <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
 <%- include('../header') -%>
-<body>
-    <div class="container">
-        <% rentedProducts.forEach((product) => {%> 
-        <div class="product-card margin-bottom">
-            <div class="row">
-                <div class="category">
-                    <div class="main">대분류</div>
-                    <div class="content"><%= product.category.mainCategory %></div>
-                </div>
-                <div class="category">
-                    <div class="sub">소분류</div>
-                    <div class="content"><%= product.category.subCategory %></div>
-                </div>
-            </div>
-            <div class="row product">
-                <div class="product-info">물품명</div>
-                <div class="content"><%= product.productName %></div>
-            </div>
-            <div class="row product">
-                <div class="product-info">물품번호</div>
-                <div class="content"><%= product.productCode %></div>
-            </div>
-            <button id="table-btn"  onclick="test(this)" type="button">대여자 정보<span class="up inline-block">▲</span><span class="down">▼</span></button>
-            <div class="table-section">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>대여자</th>
-                            <th>대여일</th>
-                            <th>대여사유</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% for(let i=0; i<product.lended.length; i++){ %>
-                        <tr>
-                            <td><%= product.lended[i].username %></td>
-                            <td><%= product.lended[i].issuedate %></td>
-                            <td><%= product.lended[i].reason %></td>
-                        </tr>
-                        <%}%>
 
-                    </tbody>
-                </table>
-    
-            </div>
+    <body>
+        <div class="container">
+            <% rentedProducts.forEach((product)=> {%>
+                <div class="product-card margin-bottom">
+                    <div class="row">
+                        <div class="category">
+                            <div class="main">대분류</div>
+                            <div class="content">
+                                <%= product.category.mainCategory %>
+                            </div>
+                        </div>
+                        <div class="category">
+                            <div class="sub">소분류</div>
+                            <div class="content">
+                                <%= product.category.subCategory %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row product">
+                        <div class="product-info">물품명</div>
+                        <div class="content">
+                            <%= product.productName %>
+                        </div>
+                    </div>
+                    <div class="row product">
+                        <div class="product-info">물품번호</div>
+                        <div class="content">
+                            <%= product.productCode %>
+                        </div>
+                    </div>
+                    <button id="table-btn" onclick="test(this)" type="button">대여자 정보<span
+                            class="up inline-block">▲</span><span class="down">▼</span></button>
+                    <div class="table-section">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>대여자</th>
+                                    <th>대여일</th>
+                                    <th>대여사유</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% for(let i=0; i<product.lended.length; i++){ %>
+                                    <tr>
+                                        <td>
+                                            <%= product.lended[i].username %>
+                                        </td>
+                                        <td>
+                                            <%= product.lended[i].issuedate %>
+                                        </td>
+                                        <td>
+                                            <%= product.lended[i].reason %>
+                                        </td>
+                                    </tr>
+                                    <%}%>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <%})%>
+
         </div>
-        <%})%>
-
-    </div>
+        <script src="../../public/js/header.js"></script>
         <script src="../../public/js/product/rentalList.js"></script>
-</body>
+    </body>
 
 </html>

@@ -15,57 +15,54 @@
 <body>
     <%- include('header') -%>
 
-        <div class="container">
-            <form method="post" class="form" id="form">
-                <h2>Sign Up</h2>
-                <hr />
-                <div class="input-form margin-top">
-                    <label for="username">이름</label>
-                    <input name="username" type="text" id="username" placeholder="Enter Username" required>
-                    <small>Error Message</small>
-                </div>
-                <div class="input-form margin-top">
-                    <label for="username">부서명</label>
-                    <input name="department" type="text" id="department" placeholder="부서명을 입력하세요" required>
-                    <small>Error Message</small>
-                </div>
-                <div class="input-form margin-top">
-                    <label for="username">직책</label>
-                    <input name="role" type="text" id="role" placeholder="직책을 입력하세요" required>
-                    <small>Error Message</small>
-                </div>
-                <div class="input-form margin-top">
-                    <label for="username">사번</label>
-                    <input name="employeeNumber" type="number" id="employeeNumber" placeholder="사번을 입력하세요" required>
-                    <input type="button" value="Username Check" class="btn">
-                    <small>Error Message</small>
-                </div>
-                <div class="input-form margin-top">
-                    <label for="email">Email</label>
-                    <input name="email" type="email" id="email" placeholder="Enter Email" required>
-                    <input type="button" value="Email Check" class="btn" id="checkEmail">
-                    <small>Error Message</small>
-                </div>
-                <div class="input-form margin-top">
-                    <label for="password">Password</label>
-                    <input name="password" type="password" id="password" placeholder="Enter Password" required>
-                    <small>Error Message</small>
-                </div>
-                <div class="input-form margin-top">
-                    <label for="password2">Confirm Password</label>
-                    <input type="password" id="password2" placeholder="Enter Password again" required>
-                    <small>Error Message</small>
-                </div>
+    <div class="container">
+        <form method="post" class="form" id="form">
+            <h2>Sign Up</h2>
+            <div class="line"></div>
+            <div class="input-form margin-top">
+                <label for="username">이름</label>
+                <input name="username" type="text" id="username" placeholder="Enter Username" required>
+                <!-- <small>Error Message</small> -->
+            </div>
+            <div class="input-form margin-top">
+                <label for="username">부서명</label>
+                <input name="department" type="text" id="department" placeholder="부서명을 입력하세요" required>
+                <!-- <small>Error Message</small> -->
+            </div>
+            <div class="input-form margin-top">
+                <label for="username">직책</label>
+                <input name="role" type="text" id="role" placeholder="직책을 입력하세요" required>
+                <!-- <small>Error Message</small> -->
+            </div>
+            <div class="input-form margin-top">
+                <label for="username">사번</label>
+                <input name="employeeNumber" type="number" id="employeeNumber" placeholder="사번을 입력하세요" required>
+                <!-- <input type="button" value="Username Check" class="btn">
+                <small>Error Message</small> -->
+            </div>
+            <div class="input-form margin-top">
+                <label for="email">Email</label>
+                <input name="email" type="email" id="email" placeholder="Enter Email" required>
+                 <!--<input type="button" value="Email Check" class="btn" id="checkEmail">
+                <small>Error Message</small> -->
+            </div>
+            <div class="input-form margin-top">
+                <label for="password">Password</label>
+                <input name="password" type="password" id="password" placeholder="Enter Password" required>
+                <!-- <small>Error Message</small> -->
+            </div>
+            <div class="input-form margin-top">
+                <label for="password2">Confirm Password</label>
+                <input type="password" id="password2" placeholder="Enter Password again" required>
+                <!-- <small>Error Message</small> -->
+            </div>
+            <div class="location-btns margin-top">
+                <button class="purple" type="button" onclick="location.href='/signinForm';">to SignIn</button>
+                <button class="green" type="button" id="signupBtn">Register</button>
+            </div>
 
-                <!-- <button>Register</button> -->
-                <div class="location-btn margin-top">
-                    <button type="button" onclick="location.href='/signinForm';"> SignIn 화면으로 </button>
-                    <button type="button" id="signupBtn">Register</button>
-                </div>
-
-            </form>
-
-        </div>
+        </form>
+    </div>
 </body>
 <script>
     function checkPasswordMatch(input1, input2) {
@@ -113,8 +110,7 @@
             })
         }
     });
-
-
 </script>
+<script src="../public/js/header.js"></script>
 
 </html>

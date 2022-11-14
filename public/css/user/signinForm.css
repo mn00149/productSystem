@@ -1,6 +1,91 @@
-*{box-sizing: border-box;}
+* {
+    box-sizing: border-box;
+}
 
-.container{
+.container {
     display: flex;
     justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
 }
+
+.form {
+    background-color: whitesmoke;
+    width: 30%;
+    border-radius: 10px;
+    border: 1px solid lightgray;
+    padding: 20px;
+    font-size: 15px;
+    margin-top: 50px;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    vertical-align: bottom;
+
+}
+
+form h2{
+    text-align: center;
+}
+
+.line{
+    height: 1px;
+    width: 80%;
+    border: 0.5px solid lightslategray;
+}
+
+.margin-top{
+    margin-top: 15px;
+}
+
+.input-form{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-form input{
+    margin-top: 5px;
+    border: 2px solid lightgrey;
+    height: 30px;
+    border-radius: 10px;
+}
+
+.form small {
+    color: red;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    visibility: hidden;
+  }
+  
+  .form.error small {
+    visibility: visible;
+  }
+
+  .location-btns{
+    width: 100%;
+    display: flex;
+    justify-content:space-around;
+  }
+
+  .location-btns button{
+    width: 30%;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: normal;
+    padding: 5px;
+    border: none;
+    color: whitesmoke;
+    box-shadow: 1px 1px 1px 1px grey;
+  }
+
+  .purple {
+    background-color: blueviolet;
+  }
+  
+  .green {
+    background-color: rgb(61, 116, 7);
+  }

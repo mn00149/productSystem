@@ -1,13 +1,21 @@
 * {
     box-sizing: border-box;
-    
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
 }
 
 .form {
-    width: 600px;
-    height: 800px;
-    border: 1px solid aqua;
-    font-size: 20px;
+    background-color: whitesmoke;
+    width: 30%;
+    border-radius: 10px;
+    border: 1px solid lightgray;
+    padding: 20px;
+    font-size: 15px;
     margin-top: 50px;
     color: black;
     display: flex;
@@ -15,16 +23,34 @@
     justify-content: space-around;
     align-items: center;
     vertical-align: bottom;
+
 }
 
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+form h2{
+    text-align: center;
+}
+
+.line{
+    height: 1px;
+    width: 80%;
+    border: 0.5px solid lightslategray;
 }
 
 .margin-top{
-    margin-top: 20px;
+    margin-top: 15px;
+}
+
+.input-form{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-form input{
+    margin-top: 5px;
+    border: 2px solid lightgrey;
+    height: 30px;
+    border-radius: 10px;
 }
 
 .form small {
@@ -37,4 +63,29 @@
   
   .form.error small {
     visibility: visible;
+  }
+
+  .location-btns{
+    width: 100%;
+    display: flex;
+    justify-content:space-around;
+  }
+
+  .location-btns button{
+    width: 30%;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: normal;
+    padding: 5px;
+    border: none;
+    color: whitesmoke;
+    box-shadow: 1px 1px 1px 1px grey;
+  }
+
+  .purple {
+    background-color: blueviolet;
+  }
+  
+  .green {
+    background-color: rgb(61, 116, 7);
   }

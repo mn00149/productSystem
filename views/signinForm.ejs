@@ -15,25 +15,25 @@
     <div class="container">
         <form action="/users/" method="post" class="form" id="form">
             <h2>Sign In</h2>
-            <hr/>
-            <div class="input-form">
+            <div class="line"></div>
 
-            <div class="input-form">
+            <div class="input-form margin-top">
                 <label for="username">사번</label>
                 <input name="employeeNumber" type='number' id="employeeNumber" placeholder="사번을 입력하세요">
-                <input type="button" value="Username Check" class="btn" >
-                <small>Error Message</small>
+                <!-- <small>Error Message</small> -->
             </div>
 
-            <div class="input-form">
+            <div class="input-form margin-top">
                 <label for="password">Password</label>
                 <input name="password" type="password" id="password" placeholder="Enter Password">
-                <small>Error Message</small>
+                <!-- <small>Error Message</small> -->
             </div>
-            <!-- <button>Register</button> -->
-            <button type="button" onclick="location.href='/signupForm';"> 계정생성 </button>
+            <div class="location-btns margin-top">
+                <button class="purple" type="button" onclick="location.href='/signupForm';"> 계정생성 </button>
+                <button class="green" type="button" id="signinBtn">Sign In</button>
+            </div>
         </form>
-        <button type="button" id="signinBtn">Sign In</button>
+
     </div>
 </body>
 <script>
@@ -50,4 +50,6 @@
     })
 });
 </script>
+<script src="../public/js/header.js"></script>
+
 </html>

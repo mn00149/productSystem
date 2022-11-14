@@ -15,10 +15,13 @@ body {
     font-weight: 300;
 }
 
+
 a {
     text-decoration: none;
     color: #222;
 }
+
+
 
 /* Type 1 Header Navigation */
 header {
@@ -36,7 +39,7 @@ nav {
     margin: auto;
 }
 
-nav > div {
+nav>div {
     /* border: 1px solid #000; */
     height: 70px;
     line-height: 70px;
@@ -49,13 +52,31 @@ nav > div {
     text-align: center;
 }
 
-.logo img{
+.logo img {
     height: 70px;
 }
 
 .gnb {
     display: inline-block;
     text-align: center;
+}
+
+.gnb button {
+    background-color: antiquewhite;
+    border: none;
+    margin: 0 10px;
+    height: 100%;
+}
+
+.gnb button:hover {
+    filter: brightness(1);
+    font-weight: bold;
+}
+
+.gnb button:focus {
+    font-weight: bold;
+    border-bottom: 2px solid black;
+
 }
 
 .gnb a {

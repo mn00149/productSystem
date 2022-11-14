@@ -1,12 +1,149 @@
-*{
+* {
     box-sizing: border-box;
 }
 
-.container{
-    display: flex;
-    justify-content: center;
+button{
+    filter: brightness(1);
+    cursor: pointer;
 }
 
+button:hover{
+    filter: brightness(0.7);
+}
+
+.container {
+    background-color: whitesmoke;
+    border-radius: 10px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.border-left{
+    border-left: 1px solid black;
+}
+
+.padding{
+    padding: 10px;
+}
+
+.register-form {
+    width: 80%;
+    font-size:large;
+    border-radius: 5px;
+    margin-top: 15px;
+    border: 1px solid black;
+
+}
+
+.head-line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: lightgray;
+}
+
+.form-control {
+    border-bottom: 1px solid black;
+}
+
+
+h3 {
+    text-align: center;
+}
+
+.register-excel-form {
+    width: 50%;
+    /* border: 1px solid blue; */
+}
+
+.category {
+    display: flex;
+}
+
+.category .form-control {
+    width: 50%;
+}
+
+.main-category-input,
+.select-main,
+.sub-category-input,
+.select-sub {
+    width: 50%;
+}
+
+.margin-top {
+    margin-top: 10px;
+}
+
+.main-category,
+.sub-category,
+.product-code-section,
+.quantity-section {
+    display: flex;
+}
+
+.main-category select,
+.sub-category select {
+    width: 50%;
+}
+
+.product-name-section,
+.quantity-section,
+.product-code-section {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.product-name-section div,
+.product-code-section div,
+.quantity-section div {
+    width: 25%;
+}
+
+.product-name-section input,
+.product-code-section input,
+.quantity-section input {
+    width: 74.8%;
+}
+
+.grey {
+    background-color: lightgrey;
+}
+
+.register-btns {
+    display: flex;
+    justify-content: space-around;
+    height: 60px;
+    padding: 10px;
+}
+
+.register-btns button {
+    font-size: 20px;
+    width: 25%;
+    border-radius: 5px;
+    border: none;
+}
+
+.red {
+    background-color: red;
+    color: whitesmoke;
+}
+
+.purple {
+    background-color: blueviolet;
+    color: whitesmoke;
+}
+
+.green {
+    background-color: rgb(61, 116, 7);
+    color: whitesmoke;
+}
 .hideInfo{
     display: none;
 }

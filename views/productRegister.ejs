@@ -54,12 +54,12 @@
                     <input id="product-name" type="text">
                 </div>
             </div>
-            <div class="form-control">
+            <div class="form-control padding">
                 <p><strong>대여가능 여부</strong></p>
                 가능: <input type="checkbox" name="rent-avl" value="1" id="rent-true" checked>
                 불가: <input type="checkbox" name="rent-avl" value="0" id="">
             </div>
-            <div class="form-control">
+            <div class="form-control padding">
                 <p><strong>반환 여부</strong></p>
                 필요: <input type="checkbox" name="return-avl" value="1" id="return-true" checked>
                 불필요: <input type="checkbox" name="return-avl" value="0" id="">
@@ -91,7 +91,7 @@
                 <input type="file" id="import-excel"></input>
             </div>
             <div class="excel-btns margin-top">
-                <button id="excel-down-btn" class="green"><img class="excel-logo" src="./104853_excel_icon.png">
+                <button id="excel-down-btn" class="green"><img class="excel-logo" src="../public/image/104853_excel_icon.png">
                     <p>엑셀양식 다운</p>
                 </button>
                 <button type="button" id="test" class="color">엑셀로 물품등록</button>
@@ -102,6 +102,6 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
     <script type="module" src="../public/js/productRegister.js"></script>
-
+    <script type="module" src="../public/js/header.js"></script>
 </body>
 </html>

@@ -30,9 +30,9 @@
                         <div><strong>권한:</strong> <%= users[i].right %></div>
                     </div>
                     <div class="btn-list">
-                        <button id="delete-user-btn" class="btn red" value="<%=users[i].employeeNumber%>" type="button">추방</button>
+                        <button id="delete-user-btn" class="delete-user-btn btn red" value="<%=users[i].employeeNumber%>" type="button">추방</button>
                         <button id="edit-right-btn" class="btn purple edit-right-btn" value="<%=users[i].employeeNumber%>" type="button">권한수정</button>
-                        <button id="reset-password-btn" class="btn green" value="<%=users[i].employeeNumber%>" type="button">password 초기화</button>
+                        <button id="reset-password-btn" class="reset-password-btn btn green" value="<%=users[i].employeeNumber%>" type="button">password 초기화</button>
                     </div>
                 </div>
             <%}%>
@@ -43,21 +43,25 @@
           <div class="window">
             <div class="popup">
               <h2>권한 수정</h3>
-              <h3 id="popup-employeeNumber">3311445668</h3>
-              <div id="check-right">
+                <div class="line margin-bottom"></div>
+              <h3 id="popup-employeeNumber" class="">3311445668</h3>
+              <div id="check-right" class="margin-bottom">
+                <p style="font-weight: bold;">권한 선택</p>
                 <span>열람</span><input type="checkbox" value="open" name="right" id="open">
                 <span>등록</span><input type="checkbox" value="register" name="right" id="register">
                 <span>편집</span><input type="checkbox" value="edit" name="right" id="edit">
                 <span>대여</span><input type="checkbox" value="rent" name="right" id="rent">
               </div>
               <div class="poup-btns">
-                <button id="register-rigth">수정</button>
-                <button id="close">팝업닫기</button>
+                <button id="close" class="margin-right red">취소</button>
+                <button id="register-rigth" class="green">수정</button>
               </div>
             </div>
           </div>
         </div>
+        <script src="../../public/js/header.js"></script>
         <script src="../../public/js/user/userManage.js"></script>
+
     </body>
 
 </html>

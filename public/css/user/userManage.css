@@ -1,138 +1,181 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-.wrap{
-    display: flex;
-    justify-content: center;
+button {
+  cursor: pointer;
+  filter: brightness(1);
 }
 
-.container{
- /* border: 1px solid black; */
- margin-top: 10px;
- border-radius: 10px;
- width: 80%;
- display: flex;
- flex-direction: column;
- background-color:whitesmoke;
-padding: 5px 0 15px 0;
-
- align-items: center;
+button:hover {
+  filter: brightness(0.7);
 }
 
-.user-card{
-    padding: 60px auto;  
-    border: 1px solid black;
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    height: 260px;
-    width: 60%;  
-    font-size: 22px; 
-    border-radius: 10px;
-    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3); 
+.wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  margin-top: 10px;
+  border-radius: 10px;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  background-color: whitesmoke;
+  padding: 5px 0 15px 0;
+  align-items: center;
+}
+
+.user-card {
+  padding: 60px auto;
+  border: 1px solid black;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  height: 260px;
+  width: 60%;
+  font-size: 22px;
+  border-radius: 10px;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
 }
 
 .userInfo-list {
-    display: flex;
-    flex-direction: column;
-    align-items:flex-start;
-    justify-content: space-around;
-    /* border: 1px solid blue; */
-    margin-right: 30px;
-    width: 500px;
-    
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-around;
+  /* border: 1px solid blue; */
+  margin-right: 30px;
+  width: 500px;
+
 }
 
-.depart-role{
+.depart-role {
   display: flex;
   justify-content: flex-start;
 }
 
-.username {
-
-}
-
-.line{
+.line {
   margin: 0 auto;
   height: 2px;
   width: 90%;
-  border: 1px solid rgb(155, 149, 149) ;
+  border: 1px solid rgb(155, 149, 149);
 }
+
 /* ---------------------------버튼 css----------------------------- */
-.btn-list{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 35%;
+.btn-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 35%;
 }
 
-.btn-list button{
-    font-size: 25px;
-    font-weight: normal;
-    padding: 5px;
-    border: none;
-    color: whitesmoke;
-    box-shadow: 3px 3px 3px 3px grey;
+.btn-list button {
+  font-size: 25px;
+  font-weight: normal;
+  padding: 5px;
+  border: none;
+  color: whitesmoke;
+  box-shadow: 3px 3px 3px 3px grey;
 }
 
-.red{
+.red {
   background-color: red;
 }
 
-.purple{
+.purple {
   background-color: blueviolet;
 }
 
-.green{
+.green {
   background-color: rgb(61, 116, 7);
 }
 
 /* -------------------------------------모달창 관련 css------------------------------------------ */
+.margin-bottom{
+  margin-bottom: 30px;
+}
+
+.line{
+  width: 100%;
+  height: 1px;
+  border: 0.5px solid lightgray;
+}
 
 .background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.3);
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1000;
 
-    /* 숨기기 */
-    z-index: -1;
-    opacity: 0;
-  }
+  /* 숨기기 */
+  z-index: -1;
+  opacity: 0;
+}
 
-  .show {
-    opacity: 1;
-    z-index: 1000;
-    transition: all 0.5s;
-  }
+.show {
+  opacity: 1;
+  z-index: 1000;
+  transition: all 0.5s;
+}
 
-  .window {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
+.window {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
 
-  .popup {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
+.popup {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 20px;
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
+  border-radius: 10PX;
+  /* 임시 지정 */
+  width: 500px;
+  height: 500px;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.3);
 
-    /* 임시 지정 */
-    width: 400px;
-    height: 400px;
+  /* 초기에 약간 아래에 배치 */
+  transform: translate(-50%, -40%);
+}
 
-    /* 초기에 약간 아래에 배치 */
-    transform: translate(-50%, -40%);
-  }
+.popup h2{
+  text-align: center;
+}
 
-  .show .popup {
-    transform: translate(-50%, -50%);
-    transition: all 0.5s;
-  }
+.show .popup {
+  transform: translate(-50%, -50%);
+  transition: all 0.5s;
+}
+
+.poup-btns{
+  display: flex;
+  justify-content: center;
+}
+
+.poup-btns button{
+  font-size: 25px;
+  width: 100px;
+  font-weight: normal;
+  padding: 5px;
+  border: none;
+  color: whitesmoke;
+  box-shadow: 3px 3px 3px 3px grey;
+}
+
+.margin-right{
+  margin-right: 30px;
+}
+

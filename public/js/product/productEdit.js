@@ -110,6 +110,7 @@ $('#register-btn').click(function () {
     $.post('/products/edit', data)
         .done((res) => {
             alert(res.message)
+            opener.document.getElementById('chkEdit').value = '1'
             window.close();
         })
         .fail((res) => {

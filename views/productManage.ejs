@@ -24,27 +24,26 @@
                     <button id="search-btn" type="button">
                         <img class="icon-size" src="../public/image/search_icon.png" alt="">
                     </button>
-                    <button type="button" id="export-btn">export</button>
+                    <button class="green" type="button" id="export-btn"><img src="../public/image/104853_excel_icon.png" alt=""><span>export</span></button>
                 </div>
+                <div class="filter">
+                    <img class="icon-size" src="../public/image/3844440_filter_filters_icon.png" alt="">
+                    <select name="" id="select-main">
+                        <option value="0">대분류</option>
+                    </select>
+                    <select name="" id="select-sub">
+                        <option value="0">소분류</option>
+                    </select>
+                    <select name="sorting" id="sorting">
+                        <option>정렬</option>
+                        <option value="1">물품명 오름차순</option>
+                        <option value="2">물품명 내림차순</option>
+                        <option value="3">등록일 오름차순</option>
+                        <option value="4">등록일 내림차순</option>
+                    </select>
+                </div>
+            </div>
 
-            </div>
-            <div class="filter">
-                <img class="icon-size" src="../public/image/3844440_filter_filters_icon.png" alt="">
-                <select name="" id="select-main">
-                    <option value="0">대분류</option>
-                </select>
-                <select name="" id="select-sub">
-                    <option value="0">소분류</option>
-                </select>
-                <select name="sorting" id="sorting">
-                    <option>정렬</option>
-                    <option value="1">물품명 오름차순</option>
-                    <option value="2">물품명 내림차순</option>
-                    <option value="3">등록일 오름차순</option>
-                    <option value="4">등록일 내림차순</option>
-                </select>
-            </div>
-            <h3>물품 관리</h3>
             <div class="product-list">
                 <table class="product-table">
                     <thead>
@@ -62,9 +61,11 @@
                     </tbody>
                 </table>
             </div>
-
+            <input id="chkEdit" type="hidden" value="0">
         </div>
         <script type="module" src="../public/js/productManage.js"></script>
+        <script type="module" src="../public/js/header.js"></script>
+
 </body>
 
 </html>

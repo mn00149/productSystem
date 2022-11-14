@@ -24,7 +24,7 @@ export const isAuth = async (req, res, next) => {
     }
     catch (err) {
         console.log("auth 미들웨어에서 발생:" + err)
-        return res.status(401).json(AUTH_ERROR);
+        return res.status(500).json({message:"서버에 에러가 생겼습니다 잠시후 다시 시도 바랍니다"});
     }
     
 }
