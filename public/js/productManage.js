@@ -9,6 +9,7 @@ let tbody = $('#product-tbody')
 let mainCategory = $('#select-main')
 let subCategory = $('#select-sub')
 
+
 function availability(i) {
     if (i == 1) return "O"
     else return "X"
@@ -60,6 +61,9 @@ function generateTbodyInf(productsList) {
 }
 // 페이지 로딩시 카테고리와 물품의 모든 정보를 가져옴
 $(document).ready(function () {
+    $('#move-productManage').css('border-bottom', '3px solid black')
+    $('#move-productManage').css('font-weight', 'bold')
+    $('#move-productManage').css('font-size', '15px')
     $.get('/products/getAll')
         .done((res) => {
             productsList = res

@@ -45,10 +45,8 @@ button:hover {
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-around;
-  /* border: 1px solid blue; */
   margin-right: 30px;
   width: 500px;
-
 }
 
 .depart-role {

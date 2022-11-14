@@ -1,6 +1,12 @@
 let popupEmployeeNum = $('#popup-employeeNumber')
 let employeeNumber = ''
 
+$(document).ready(function(){
+   $('#move-userManage').css('border-bottom', '3px solid black')
+   $('#move-userManage').css('font-weight', 'bold')
+   $('#move-userManage').css('font-size', '15px')
+})
+
 $('.reset-password-btn').on('click', function() {
    let employeeNumber = $(this).val()
    alert('클릭')

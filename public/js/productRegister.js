@@ -9,6 +9,9 @@ let productNameInput = $('#product-name')
 let dataFromExcel = {}
 
 $(document).ready(function () {
+    $('#move-productRegister').css('border-bottom', '3px solid black')
+    $('#move-productRegister').css('font-weight', 'bold')
+    $('#move-productRegister').css('font-size', '15px')
     $.get('/category').done((res) => {
         category = res
         for (let i = 0; i < category.length; i++) {
