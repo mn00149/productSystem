@@ -91,7 +91,6 @@ app.get('/excelForm', async(req, res) => {
   var filestream = fs.createReadStream(_filename); // readStream 생성
   filestream.pipe(res); // express 모듈의 response를 pipe에 넣으면 스트림을 통해 다운로드된다.
 
-  //fs.unlinkSync(_filename); // 다운했으니 삭제
   return res.status(200).json({message: '엑셀 양식이 다운로드 되었습니다' })
   } catch (error) {
     console.log(e);
@@ -99,6 +98,12 @@ app.get('/excelForm', async(req, res) => {
     return;
   }
 })
+
+//최종 에러처리 담당 api
+app.use((error, req, res, next) => {
+  console.error(error);
+  res.status(500).json({ message: 'Something went wrong' });
+});
 
 connectDB()
   .then(() => {

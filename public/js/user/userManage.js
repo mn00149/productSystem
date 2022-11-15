@@ -9,7 +9,6 @@ $(document).ready(function(){
 
 $('.reset-password-btn').on('click', function() {
    let employeeNumber = $(this).val()
-   alert('클릭')
    $.post('/users/resetPassword', {employeeNumber})
     .done((res) => {
        alert('패스워드가 초기화 되었습니다')
