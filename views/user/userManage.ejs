@@ -9,12 +9,14 @@
     <link rel="stylesheet" href="../../public/css/header.css" />
     <link rel="stylesheet" href="../../public/css/user/userManage.css" />
     <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <%- include('../header') -%>
     <body>
         <div class="wrap">
             <div class="container">
                 <% for(let i=0; i<users.length; i++){%>
+                  <% let count = users[i].lending.filter((i) => !i.returndate).length %>
                 <div class="user-card">
                     <div class="userInfo-list">
                       <div class="userInfo-top">
@@ -30,7 +32,7 @@
                         <div><strong>권한:</strong> <%= users[i].right %></div>
                     </div>
                     <div class="btn-list">
-                        <button id="delete-user-btn" class="delete-user-btn btn red" value="<%=users[i].employeeNumber%>" type="button">추방</button>
+                        <button id="delete-user-btn" class="delete-user-btn btn red" value="<%=users[i].employeeNumber%>" type="button">추방<input type="hidden" value="<%= count %>"></button>
                         <button id="edit-right-btn" class="btn purple edit-right-btn" value="<%=users[i].employeeNumber%>" type="button">권한수정</button>
                         <button id="reset-password-btn" class="reset-password-btn btn green" value="<%=users[i].employeeNumber%>" type="button">password 초기화</button>
                     </div>

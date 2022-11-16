@@ -109,12 +109,22 @@ $('#register-btn').click(function () {
 
     $.post('/products/edit', data)
         .done((res) => {
-            alert(res.message)
+            Swal.fire({
+                title:'수정 성공',
+                text: res.message,
+                icon: 'success',
+                showConfirmButton: false
+            })
             opener.document.getElementById('chkEdit').value = '1'
-            window.close();
+            setTimeout(() => {window.close();}, 1500)
+            
         })
         .fail((res) => {
-            alert(res.responseJSON.message)
+            Swal.fire({
+                title:'수정 실패',
+                text: res.responseJSON.message,
+                icon: 'error',
+            })
             console.log(res)
         })
 })
