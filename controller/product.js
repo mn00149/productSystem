@@ -4,6 +4,7 @@ import * as productRepository from '../models/Product.js';
 import * as categoryRepository from '../models/Category.js';
 import * as userRepository from '../models/User.js';
 import * as util from '../middleware/util.js'
+import { isNull } from 'util';
 
 // 물품 등록 처리 컨트롤러
 export async function register(req, res) {
@@ -29,6 +30,7 @@ export async function register(req, res) {
 // 엑셀로 물품 등록처리 컨트롤러
 export async function registerByExcel(req, res) {
   const { data } = req.body
+
   try {
     const products = data.map((product) => {
       product.대여여부 == "O" ? product.대여여부 = 1 : product.대여여부 = 0
@@ -44,6 +46,14 @@ export async function registerByExcel(req, res) {
       }
       return newProduct
     })
+    let isValidExcel = true
+    products.forEach(product => {
+      for (const key in product) {
+        console.log(product[key])
+        product[key] === '' || product[key] == undefined ? isValidExcel = false : null
+      }
+    });
+    if (!isValidExcel) return res.status(400).json({ message: `올바른 형식의 등록폼이 아닙니다!! Excel 폼 확인 혹은 비어있는 란이 없는지 확인 해주세요!` })
 
     const categoryList = async (list) => {
       for (const data of list) {
@@ -61,7 +71,7 @@ export async function registerByExcel(req, res) {
     categoryList(products)
     return res.status(200).json({ message: "성공적으로 등록 되었습니다" })
   } catch (error) {
-    res.status(500).json({ message: "에러가 발생했습니다 잠시후 다시 시도 부탁드립니다" })
+    return res.status(500).json({ message: "에러가 발생했습니다 잠시후 다시 시도 부탁드립니다" })
   }
 }
 
@@ -141,7 +151,7 @@ export async function rent(req, res) {
     if (!duedate || !issuedate || new Date(issuedate) > new Date(duedate)) return res.status(409).json({ message: "대여시간 설정이 잘못되었습니다" })
     issuedate = issuedate.replace("T", " ")
     duedate = duedate.replace("T", " ")
-  }else{issuedate = util.getDate()}
+  } else { issuedate = util.getDate() }
   const newQuantity = product.quantity - 1
   if (newQuantity < 0) { return res.status(409).json({ message: "대여가능한 수량이 없습니다" }) }
   const lending = {
@@ -159,7 +169,8 @@ export async function rent(req, res) {
     username: user.username,
     reason,
     issuedate,
-    duedate
+    duedate,
+    isDeleted: 0
   }
   user.lending.push(lending)
   product.lended.push(lended)

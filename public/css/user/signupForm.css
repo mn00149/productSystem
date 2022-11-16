@@ -2,6 +2,11 @@
     box-sizing: border-box;
 }
 
+:root {
+  --success-color: #2ecc71;
+  --error-color: red;
+}
+
 .container {
     display: flex;
     justify-content: center;
@@ -34,6 +39,7 @@ form h2{
     height: 1px;
     width: 80%;
     border: 0.5px solid lightslategray;
+    margin-bottom: 15px;
 }
 
 .margin-top{
@@ -55,16 +61,25 @@ form h2{
 
 .form small {
     color: red;
-    position: absolute;
-    bottom: 0;
-    left: 0;
     visibility: hidden;
   }
   
-  .form.error small {
+  .input-form.success input {
+    border-color: var(--success-color);
+  }
+  
+  .input-form.error input {
+    border-color: var(--error-color);
+  }
+  
+  .input-form small {
+    color: var(--error-color);
+    visibility: hidden;
+  }
+  
+  .input-form.error small {
     visibility: visible;
   }
-
   .location-btns{
     width: 100%;
     display: flex;

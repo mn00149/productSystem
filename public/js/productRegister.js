@@ -9,13 +9,13 @@ let productNameInput = $('#product-name')
 let dataFromExcel = {}
 
 $(document).ready(function () {
+    //해당 Nav버튼 클릭 처리
     $('#move-productRegister').css('border-bottom', '3px solid black')
     $('#move-productRegister').css('font-weight', 'bold')
     $('#move-productRegister').css('font-size', '15px')
     $.get('/category').done((res) => {
         category = res
         for (let i = 0; i < category.length; i++) {
-
             subOptions[category[i].mainCategory] = category[i].subCategory
             let option = "<option value=" + category[i].mainCategory + ">" + category[i].mainCategory + "</option>"
             mainCategory.append(option)
@@ -25,7 +25,7 @@ $(document).ready(function () {
     $('#quantity').val('1')
 
 })
-
+// 대분류 변동
 mainCategory.change(function () {
     let currentMain = $(this).val()
     subCategory.empty();
@@ -44,14 +44,14 @@ mainCategory.change(function () {
     } else { mainCategoryInput.val(currentMain) }
     subCategoryInput.val('')
 })
-
+//소분류 변동
 subCategory.change(function () {
     let currentSub = $(this).val()
     if (currentSub == '직접입력') {
         subCategoryInput.val('')
     } else { subCategoryInput.val(currentSub) }
 })
-
+// 대여 여부 가능/불가 두개중 한개만 선택 가능 하도록 설정
 $('input[type="checkbox"][name="rent-avl"]').click(function () {
 
     if ($(this).prop('checked')) {
@@ -63,7 +63,7 @@ $('input[type="checkbox"][name="rent-avl"]').click(function () {
     }
 
 });
-
+// 반납 여부 가능/불가 두개중 한개만 선택 가능 하도록 설정
 $('input[type="checkbox"][name="return-avl"]').click(function () {
 
     if ($(this).prop('checked')) {
@@ -89,12 +89,23 @@ $('#register-btn').click(function () {
     let data = { mainCategory, subCategory, productName, returnAvailability, rentalAvailability, productCode, quantity }
 
     $.post('/products/register', data).done((res) => {
-        alert(res.message)
+        Swal.fire({
+            title:'Register Success',
+            text: res.message,
+            icon:'success',
+            timer:2000,
+            showConfirmButton:false
+        }
+        )
         reset([mainCategoryInput, subCategoryInput, productCodeInput, productNameInput ])
 
     })
         .fail((res) => {
-            alert(res.responseJSON.message)
+            Swal.fire({
+                icon: 'error',
+                title: '등록 실패',
+                text: res.responseJSON.message,
+              })
             console.log(res)
         })
 })
@@ -102,17 +113,35 @@ $('#register-btn').click(function () {
 $('.reset-btn').click(function(){
     reset([mainCategoryInput, subCategoryInput, productCodeInput, productNameInput ])
 })
+
+//취소버튼
+$('.cancel-btn').click(function(){
+    location.href = '/products/manage'
+})
 //엑셀폼 단운
 $('#excel-down-btn').click(function(){
     $.get('/excelForm')
-    .done((res) => {console.log(res.message); alert("엑셀 양식이 다운로드 되었습니다")})
-    .fail((res) => alert(res.responseJSON.message))
+    .done((res) => {
+        Swal.fire(
+            'Excel 양식다운',
+            "엑셀 양식이 다운로드 되었습니다",
+            'success'
+        )
+    })
+    .fail((res) => Swal.fire({
+        icon:'error',
+        title:'Excel 양식다운 실패',
+        text:res.responseJSON.message
+    }))
 })
 
 function reset(arr) {
     for (let i = 0; i < arr.length; i++) {
         arr[i].val('');
     };
+    $("#select-main").val("0").prop("selected", true);
+    subCategory.empty();
+    subCategory.append("<option>직접입력</option>")
     $('input[type="checkbox"][name="rent-avl"]').prop('checked', false);
     $('input[type="checkbox"][name="return-avl"]').prop('checked', false);
     $('#rent-true').prop('checked', true)
@@ -140,22 +169,37 @@ $('#import-excel').change(function() {
 })
 
 $('#test').click(function(){
-    if(Object.keys(dataFromExcel).length  == 0){alert('엑셀 파일을 선택해주세요')}
+    if(Object.keys(dataFromExcel).length  == 0){
+        Swal.fire({
+        text:'엑셀 파일을 선택해주세요',
+        icon:'warning',
+        title:'파일이 없습니다'
+    })}
     else{
         console.log(dataFromExcel)
         let data = [] 
         dataFromExcel.forEach((i) => {
-
-
-            
             data.push(i)
         })
         $.post('/products/register/excel', {data})
         .done((res) => {
-            alert(res.message)
-            location.reload()
+            Swal.fire({
+                title:"등록 성공",
+                text:res.message,
+                icon:'success',
+                timer: 2000,
+                showConfirmButton:false
+            }
+            )
+            setTimeout(() => {location.reload()}, 2500)
+            
+            
         })
-        .fail((res) => alert(res.responseJSON.message))
+        .fail((res) => Swal.fire({
+            title: '등록 실패',
+            text:res.responseJSON.message,
+            icon: "error"
+        }))
     }
     
 })

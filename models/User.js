@@ -1,6 +1,5 @@
 import Mongoose from 'mongoose';
 import { useVirtualId } from '../database/database.js';
-import * as productRepository from './Product.js'
 import * as deletedUserRepository from './DeletedUser.js'
 
 
@@ -41,7 +40,7 @@ export async function findByEmployeeNumber(employeeNumber) {
 export async function updateUserbyUser(user) {
   return new User(user).save().then((data) => data.id);
 }
-
+// 추방 당하지 않은 유저들만 불러 올 것
 export async function getAll() {
   return User.find({});
 }
@@ -65,5 +64,9 @@ export async function deleteByEmployeeNumber(employeeNumber) {
   return await deletedUserRepository.create(deletedUser)
 }
 
+// export async function deleteByEmployeeNumber(employeeNumber) {
+//   const deletedUser = await User.findOneAndUpdate({ employeeNumber }, {isDeleted: 1})
+//   return await deletedUserRepository.create(deletedUser)
+// }
 
 

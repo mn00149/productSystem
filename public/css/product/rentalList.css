@@ -12,6 +12,7 @@
     padding: 10px;
 }
 
+table{border-collapse:collapse;}
 
 .row{
     border: 1px solid black;
@@ -58,6 +59,7 @@ table{
     border-top: 0px;
     width: 100%;
     margin: 0 auto;
+    background-color: white;
 }
 
 th, td{

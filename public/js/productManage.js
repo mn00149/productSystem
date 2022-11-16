@@ -19,7 +19,7 @@ function availability(i) {
 function generateTbodyInf(productsList) {
     let product = ""
     for (let i = 0; i < productsList.length; i++) {
-        
+
         let lending = productsList[i].rentalQuantity
         let left = productsList[i].quantity
         let total = lending + left
@@ -45,9 +45,8 @@ function generateTbodyInf(productsList) {
                             <div class="select-btn">
                                 <button type="button" id="user-list" value="${productsList[i].productCode}">대여자 목록</button>
                                 <button type="button" id="rental-record" value="${productsList[i].productCode}">대여이력</button>
-                                ${
-                                    productsList[i].rentalAvailability ? "<button id=rental-btn type=button value="+productsList[i].productCode+">대여</button>" : ""
-                                }
+                                ${productsList[i].rentalAvailability ? "<button id=rental-btn type=button value=" + productsList[i].productCode + ">대여</button>" : ""
+            }
                                 <button id="delete-btn" type="button" value="${productsList[i].productCode}">삭제</button>
                                 <button id="edit-btn" type="button" value="${productsList[i].productCode}">수정</button>
                                 
@@ -61,17 +60,25 @@ function generateTbodyInf(productsList) {
 }
 // 페이지 로딩시 카테고리와 물품의 모든 정보를 가져옴
 $(document).ready(function () {
+    //헤더 클릭 처리를 위한 css커트롤
     $('#move-productManage').css('border-bottom', '3px solid black')
     $('#move-productManage').css('font-weight', 'bold')
     $('#move-productManage').css('font-size', '15px')
+
     $.get('/products/getAll')
         .done((res) => {
             productsList = res
             tbody.empty()
-            let  tbodyInf = generateTbodyInf(productsList)
+            let tbodyInf = generateTbodyInf(productsList)
             tbody.append(tbodyInf)
         })
-        .fail((res) => { alert(res.responseJSON) })
+        .fail((res) => {
+            Swal.fire({
+                title: "물품 정보 조회 실패",
+                text: res.responseJSON,
+                icon: 'error'
+            })
+        })
 
     $.get('/category').done((res) => {
         category = res
@@ -80,8 +87,9 @@ $(document).ready(function () {
             let option = "<option value=" + category[i].mainCategory + ">" + category[i].mainCategory + "</option>"
             mainCategory.append(option)
         }
-    }).fail(() => {
-        alert("서버에 오류가 생겼습니다 잠시후 다시 시도해주시길 바랍니다")
+    }).fail((res) => {
+        console.log(res)
+        Swal.fire({title:"Error 발생",text:"서버에 오류가 생겼습니다 잠시후 다시 시도해주시길 바랍니다",icon:'error'})
     })
 })
 //대분류가 바뀌때
@@ -209,23 +217,47 @@ searchBtn.click(function () {
             .done((res) => {
                 productsList = res
                 if (!productsList.length) {
-                    alert('검색결과가 없습니다')
+                    Swal.fire({
+                        title:'검색 결과 없음',
+                        text: '검색결과가 없습니다',
+                        icon:'warning',
+                        timer:1000,
+                        showConfirmButton:false
+                    })
                 }
 
                 tbody.append(generateTbodyInf(productsList))
             })
-            .fail(() => alert('검색결과 없습니다'))
-    }else{
+            .fail(() =>  Swal.fire({
+                title:'검색 결과 없음',
+                text: '검색결과가 없습니다',
+                icon:'warning',
+                timer:1000,
+                showConfirmButton:false
+            }))
+    } else {
         $.get('/products/search/username/' + searchInput.val())
-        .done((res) => {
-            productsList = res
-            if (!productsList.length) {
-                alert('검색결과가 없습니다')
-            }
+            .done((res) => {
+                productsList = res
+                if (!productsList.length) {
+                    Swal.fire({
+                        title:'검색 결과 없음',
+                        text: '검색결과가 없습니다',
+                        icon:'warning',
+                        timer:1000,
+                        showConfirmButton:false
+                    })
+                }
 
-            tbody.append(generateTbodyInf(productsList))
-        })
-        .fail(() => alert('검색결과 없습니다'))
+                tbody.append(generateTbodyInf(productsList))
+            })
+            .fail(() =>  Swal.fire({
+                title:'검색 결과 없음',
+                text: '검색결과가 없습니다',
+                icon:'warning',
+                timer:1000,
+                showConfirmButton:false
+            }))
     }
 
 
@@ -233,41 +265,90 @@ searchBtn.click(function () {
 //엑셀로 내보내기
 $('#export-btn').click(() => {
     $.getJSON('/products/export/excel')
-    .done((res) => {
-        alert(res.message)
-        console.log(typeof res)
-    })
-    .fail(() => {alert('다운로드중 에러가 발생 했습니다 에러가 지속될 경우 관리자에게 문의 바랍니다')})
+        .done((res) => {
+            Swal.fire({
+                title:'Export 성공',
+                text: '성공적으로 Excel 파일이 내보내 졌습니다',
+                icon:'success',
+                timer:2000,
+                showConfirmButton:false
+            })
+            console.log(typeof res)
+        })
+        .fail((res) => {
+            console.log(res) 
+            Swal.fire({
+                title:'내보내기 실패',
+                text: res.responseJSON.message,
+                icon:'error',
+            })
+         })
 })
 
-$(document).on("click", "#delete-btn", function(){
-    $.post('/products/delete',{productCode: $(this).val()})
-        .done(() => { window.location.href=window.location.href })
-        .fail((res) => { alert(res.responseJSON) })
+$(document).on("click", "#delete-btn", function () {
+    const productCode =  $(this).val()
+    Swal.fire({
+        title: `<strong  style="color: red;">${productCode}</strong> 삭제`,
+        text: `삭제 후 복구가 어렵습니다. 물품번호를 다시 한번 확인 바랍니다!!` ,
+        icon: 'warning',
+        
+        showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+        confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+        cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+        confirmButtonText: '삭제', // confirm 버튼 텍스트 지정
+        cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+        
+        reverseButtons: true, // 버튼 순서 거꾸로
+        
+     }).then(result => {
+        // 만약 Promise리턴을 받으면,
+        if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+            $.post('/products/delete', { productCode })
+            .done(() => {
+                Swal.fire({title:'삭제가 완료되었습니다.', text:'복구를 원할시 데이터 관리자에게 문의 바랍니다', icon:'success', showConfirmButton:false});
+                setTimeout(() => {window.location.href = window.location.href}, 2000) 
+                
+            })
+            .fail((res) => {
+                console.log(res)           
+                 Swal.fire({
+                    title:'삭제 실패',
+                    text: res.responseJSON.message,
+                    icon:'error',
+                }) 
+            })
+        }
+     });
+
 });
 
-$(document).on("click", "#rental-btn", function(){   
-     const retalFormPopup = window.open('/products/rentalForm/'+$(this).val(),'rentalform popup', 'width=700px,height=800px,scrollbars=yes')
-});
-
-
-
-$(document).on("click", "#user-list", function(){   
-    window.open('/products/usersInf/'+$(this).val(),'user-list form popup', 'width=700px,height=800px,scrollbars=yes')
-});
-
-$(document).on("click", "#rental-record", function(){   
-    window.open('/products/rentalRecord/'+$(this).val(),'user-list form popup', 'width=700px,height=800px,scrollbars=yes')
-});
-
-$(document).on("click", "#edit-btn", function(){   
-    const edintFormPopup = window.open('/products/edit/'+$(this).val(),'product edit form popup', 'width=700px,height=800px,scrollbars=yes')
-    edintFormPopup.addEventListener('beforeunload', function(e){
-        console.log(e)
-        if($('#chkEdit').val() == 1){
+$(document).on("click", "#rental-btn", function () {
+    const retalFormPopup = window.open('/products/rentalForm/' + $(this).val(), 'rentalform popup', 'width=700px,height=800px,scrollbars=yes')
+    retalFormPopup.addEventListener('beforeunload', function (e) {
+        if ($('#chkEdit').val() == 1) {
             window.location.reload()
             $('#chkEdit').val() = '0'
-        } 
-     });
+        }
+    });
+});
+
+
+
+$(document).on("click", "#user-list", function () {
+    window.open('/products/usersInf/' + $(this).val(), 'user-list form popup', 'width=700px,height=800px,scrollbars=yes')
+});
+
+$(document).on("click", "#rental-record", function () {
+    window.open('/products/rentalRecord/' + $(this).val(), 'user-list form popup', 'width=700px,height=800px,scrollbars=yes')
+});
+
+$(document).on("click", "#edit-btn", function () {
+    const edintFormPopup = window.open('/products/edit/' + $(this).val(), 'product edit form popup', 'width=700px,height=800px,scrollbars=yes')
+    edintFormPopup.addEventListener('beforeunload', function (e) {
+        if ($('#chkEdit').val() == 1) {
+            window.location.reload()
+            $('#chkEdit').val() = '0'
+        }
+    });
 });
 

@@ -118,7 +118,7 @@ $('#register-btn').click(function () {
             console.log(res)
         })
 })
-
+//리셋버튼 클릭
 $('.reset-btn').click(function () {
     reset([mainCategoryInput, subCategoryInput, productCodeInput, productNameInput])
 })

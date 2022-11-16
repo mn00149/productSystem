@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 import * as userRepository from '../models/User.js';
 import * as deletedUserRepository from '../models/DeletedUser.js'
+import * as productRepository from '../models/Product.js'
 
 //Make Secure
 const jwtSecretKey = process.env.JWT_SECRET;
@@ -98,6 +99,7 @@ export async function resetPassword(req, res) {
   export async function deleteUser(req, res) {
     const {employeeNumber} = req.body
     try {
+      await productRepository.updateDeletedUser(employeeNumber)
       await userRepository.deleteByEmployeeNumber(employeeNumber)
       return res.status(200).json({message:"회원이 추방 되었습니다"})
     } catch (error) {

@@ -37,6 +37,10 @@ body{
     border: none;
 }
 
+.search button{
+    cursor: pointer;
+}
+
 .search button img{
     height: 20px;
     width: 20px;

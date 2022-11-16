@@ -55,18 +55,32 @@
                             </thead>
                             <tbody>
                                 <% for(let i=0; i<product.lended.length; i++){ %>
-                                    <tr>
-                                        <td>
-                                            <%= product.lended[i].username %>
-                                        </td>
-                                        <td>
-                                            <%= product.lended[i].issuedate %>
-                                        </td>
-                                        <td>
-                                            <%= product.lended[i].reason %>
-                                        </td>
-                                    </tr>
-                                    <%}%>
+                                    <%if(product.lended[i].isDeleted){ %>
+                                        <tr style="background-color: red;">
+                                            <td style="background-color: red;">
+                                                <%= product.lended[i].username %>
+                                            </td>
+                                            <td style="background-color: red;">
+                                                <%= product.lended[i].issuedate %>
+                                            </td>
+                                            <td style="background-color: red;">
+                                                <%= product.lended[i].reason %>
+                                            </td>
+                                        </tr>
+                                        <%}else{%>
+                                            <tr>
+                                                <td>
+                                                    <%= product.lended[i].username %>
+                                                </td>
+                                                <td>
+                                                    <%= product.lended[i].issuedate %>
+                                                </td>
+                                                <td>
+                                                    <%= product.lended[i].reason %>
+                                                </td>
+                                            </tr>
+                                            <%}%>
+                                                <%}%>
 
                             </tbody>
                         </table>

@@ -17,7 +17,6 @@
             <div class="form-header">
                 <h2>물품대여</h2>
             </div>
-            <!-- <div class="line"></div> -->
             <div class="form-body">
                 <div class="form-row">
                     <div class="sub-title"><strong>물품</strong> </div>
@@ -76,6 +75,7 @@
                 .done((res) => {
                     console.log(res)
                     alert(res.message)
+                    opener.document.getElementById('chkEdit').value = '1'
                     window.close()
                 })
                 .fail((res) => {

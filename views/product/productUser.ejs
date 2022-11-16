@@ -23,12 +23,22 @@
             </thead>
             <tbody>
                 <% for(let i=0; i<lendedUsers.length; i++){ %>
-                    <tr>
-                        <td><%=lendedUsers[i].username%></td>
-                        <td><%=lendedUsers[i].employeeNumber%></td>
-                        <td><%=lendedUsers[i].reason%></td>
-                        <td><p class="margin-bottom5"><%=lendedUsers[i].issuedate%></p>~<p class="margin-bottom5"><%=lendedUsers[i].duedate%></p> </td>
-                    </tr>
+                    <%if(lendedUsers[i].isDeleted){ %>
+                        <tr style="background-color: red;">
+                            <td><%=lendedUsers[i].username%></td>
+                            <td><%=lendedUsers[i].employeeNumber%></td>
+                            <td><%=lendedUsers[i].reason%></td>
+                            <td><p class="margin-bottom5"><%=lendedUsers[i].issuedate%></p>~<p class="margin-bottom5"><%=lendedUsers[i].duedate%></p> </td>
+                        </tr>
+                    <%}else{%>
+                        <tr>
+                            <td><%=lendedUsers[i].username%></td>
+                            <td><%=lendedUsers[i].employeeNumber%></td>
+                            <td><%=lendedUsers[i].reason%></td>
+                            <td><p class="margin-bottom5"><%=lendedUsers[i].issuedate%></p>~<p class="margin-bottom5"><%=lendedUsers[i].duedate%></p> </td>
+                        </tr> 
+                   <%}%> 
+
                 <%}%>
             </tbody>
         </table>

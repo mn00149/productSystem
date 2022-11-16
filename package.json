@@ -25,7 +25,8 @@
     "iconv-lite": "^0.6.3",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.11.0",
-    "mongoose": "^6.6.7"
+    "mongoose": "^6.6.7",
+    "sweetalert2": "^11.6.8"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"

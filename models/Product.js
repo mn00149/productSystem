@@ -65,8 +65,13 @@ export async function getAllBeingRented(){
   }})
 }
 
+export async function updateDeletedUser(employeeNumber){
+  employeeNumber = Number(employeeNumber)
+  return Product.update({'lended.employeeNumber':employeeNumber},
+  {'$set':{"lended.$.isDeleted":1}}).exec()
+}
+
 export async function createByExcel(product) {
-  
 await Product.findOneAndUpdate(
   {productCode: product.productCode},
   {
