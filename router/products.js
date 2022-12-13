@@ -14,6 +14,12 @@ router.get('/register', async (req, res) => {
   res.render('productRegister', { user })
 })
 
+//물품등록 popup 폼 화면 호출 api
+router.get('/register/popup', async (req, res) => {
+  const user = req.user
+  res.render('productRegisterPop')
+})
+
 //물품등록 api
 router.post('/register', productController.register);
 

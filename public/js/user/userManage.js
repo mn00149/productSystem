@@ -88,6 +88,13 @@ function show() {
          $(id).prop('checked', true);
       });
     })
+    .fail((res) => {
+      Swal.fire({
+         title:'에러발생',
+         text:res.responseJSON.message,
+         icon:'error'
+      })
+    })
  })
 
  $("#register-rigth").click(function(){

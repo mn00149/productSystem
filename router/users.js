@@ -10,8 +10,8 @@ const router = express.Router();
 
 //로그아웃 api
 router.get('/logout', async (req, res) => {
- res.clearCookie('x_auth')
- res.redirect('/signinForm')
+  res.clearCookie('x_auth')
+  res.redirect('/signinForm')
 });
 //validate 함수
 const validate = (req, res, next) => {
@@ -34,19 +34,19 @@ const validateRegister = [
 ];
 
 // 회원가입 api
-router.post('/signup',validateRegister, userController.signup)
+router.post('/signup', validateRegister, userController.signup)
 
 //로그인 api
-router.post('/signin', userController.signin )
+router.post('/signin', userController.signin)
 
 //이용자 현황 페이지렌더링 
 router.get('/status', isAuth, userController.renderUserStatus)
 
 // 이용자 관리 페이지 렌더링(유저 정보까지 가져감)
-router.get('/manage', userController.rederUserManage )
+router.get('/manage', userController.rederUserManage)
 
 // password 리셋 api
-router.post('/resetPassword', userController.resetPassword )
+router.post('/resetPassword', userController.resetPassword)
 
 // 이용자 추방 api
 router.post('/delete', userController.deleteUser)

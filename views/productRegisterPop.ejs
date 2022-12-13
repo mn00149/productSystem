@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="../../public/css/header.css" />
+    <link rel="stylesheet" href="../../public/css/productRegisterPop.css" />
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+        <div class="container" style="margin-top:10px;">
+            <div class="register-form">
+                <div class="form-control head-line">
+                    <h3 class="grey">물품 등록</h3>
+                </div>
+                <div class="category">
+                    <div class="form-control">
+                        <div>
+                            <div class="grey padding">
+                                <strong>대분류</strong>
+                            </div>
+                            <div class="main-category">
+                                <select class="padding" name="" id="select-main">
+                                    <option value="0">직접입력</option>
+                                </select>
+                                <input type="text" class="main-category-input">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-control ">
+                        <div>
+                            <div class="grey border-left padding">
+                                <strong>소분류</strong>
+                            </div>
+                            <div class="sub-category">
+                                <select class="padding" name="" id="select-sub">
+                                    <option value="0">직접입력</option>
+                                </select>
+                                <input type="text" class="sub-category-input">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-control">
+                    <div class="product-name-section">
+                        <div class="grey padding"><strong>물품명</strong></div>
+                        <input id="product-name" type="text">
+                    </div>
+                </div>
+                <div class="form-control padding">
+                    <p><strong>대여가능 여부</strong></p>
+                    가능: <input type="checkbox" name="rent-avl" value="1" id="rent-true" checked>
+                    불가: <input type="checkbox" name="rent-avl" value="0" id="">
+                </div>
+                <div class="form-control padding">
+                    <p><strong>반환 여부</strong></p>
+                    필요: <input type="checkbox" name="return-avl" value="1" id="return-true" checked>
+                    불필요: <input type="checkbox" name="return-avl" value="0" id="">
+                </div>
+                <div class="form-control product-code-section">
+                    <div class="grey padding"><strong>물품번호</strong></div>
+                    <input id="product-code" type="text">
+                </div>
+                <div class="form-control quantity-section">
+                    <div class="grey padding"><strong>수량</strong></div>   
+                    <input id="quantity" type="number">
+                </div>
+                <div class="form-control register-btns">
+                    <button class="reset-btn purple"><img width="20px" height="20px" src="../../public/image/reset.png"
+                            alt="#"></button>
+                    <button type="button" id="register-btn" class="color">등록</button>
+                    <button type="button" class="cancel-btn red">취소</button>
+                </div>
+            </div>
+
+
+            <div class="register-excel-form margin-top">
+                <div class="excel-headline">
+                    <h3>엑셀로 등록하기</h3>
+                </div>
+                <div class="filebox">
+                    <input class="upload-name" value="첨부파일" placeholder="첨부파일">
+                    <label for="import-excel">파일찾기</label>
+                    <input type="file" id="import-excel"></input>
+                </div>
+                <div class="excel-btns margin-top">
+                    <button id="excel-down-btn" class="green"><img class="excel-logo"
+                            src="../../public/image/104853_excel_icon.png">
+                        <p>엑셀양식 다운</p>
+                    </button>
+                    <button type="button" id="test" class="color">엑셀로 물품등록</button>
+                </div>
+
+            </div>
+
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
+        <script type="module" src="../../public/js/productRegisterPop.js"></script>
+</body>
+
+</html>

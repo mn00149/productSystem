@@ -9,8 +9,10 @@
     <link rel="stylesheet" href="../../public/css/header.css" />
     <link rel="stylesheet" href="../../public/css/user/userStatus.css" />
     <script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <%- include('../header') -%>
+
     <body>
         <div class="container">
             <table>
@@ -40,18 +42,21 @@
                             <td>
                                 <%= user.lending[i].productCode %>
                             </td>
-                            <td><%= user.lending[i].reason %></td>
                             <td>
-                                <p><%= user.lending[i].issuedate %></p>
-                                ~
-                                <p><%= user.lending[i].duedate %></p>
+                                <%= user.lending[i].reason %>
                             </td>
                             <td>
-                                <form action="/products/return" method="post">
-                                    <input type="hidden" name="productCode" value="<%= user.lending[i].productCode %>">
-                                    <button id="return-btn" type="submit">반납</button>
-                                </form>
-                                
+                                <p>
+                                    <%= user.lending[i].issuedate %>
+                                </p>
+                                ~
+                                <p>
+                                    <%= user.lending[i].duedate %>
+                                </p>
+                            </td>
+                            <td>
+                                <button value="<%= user.lending[i].productCode %>" id="return-btn"
+                                    type="button">반납</button>
                             </td>
                         </tr>
                         <%}%>

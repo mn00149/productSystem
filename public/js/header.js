@@ -41,3 +41,11 @@ $('#move-userManage').click(function () {
             alert(res.responseJSON.message)
         })
 })
+
+// ---------------------------------------로딩화면 구현 함수----------------------------------------
+function showSpinner() {
+    document.getElementsByClassName('layerPopup')[0].style.display='block';
+}
+function hideSpinner() {
+    document.getElementsByClassName('layerPopup')[0].style.display='none';
+}

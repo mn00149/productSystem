@@ -43,6 +43,7 @@ export async function signup(req, res) {
 }
 //로그인 처리 컨트롤러
 export async function signin(req, res) {
+  try {
     const { employeeNumber, password } = req.body;
     const user = await userRepository.findByEmployeeNumber(employeeNumber);
     if (!user) {
@@ -61,6 +62,11 @@ export async function signin(req, res) {
             loginSuccess: true,
             userId: user._id
         })
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ message: "서버에 에러가 발생하였습니다. 잠시후 다시 시도해주시길 바랍니다" })
+  }
+
 }
 
 //jwt 토큰생성 함수
@@ -74,9 +80,15 @@ export async function renderUserStatus(req, res) {
 }
 //전체 이용자 현황 관리 페이지 레더링 컨트롤러
 export async function rederUserManage(req, res) {
+  try {
     const user = req.user
     const users = await userRepository.getAll()
     res.render('user/userManage', {users, user})
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ message: "서버에 에러가 발생하였습니다. 잠시후 다시 시도해주시길 바랍니다" })
+  }
+
   }
 //password 초기화 처리 컨트롤러
 export async function resetPassword(req, res) {
@@ -110,16 +122,25 @@ export async function resetPassword(req, res) {
 // 권한 수정 처리 컨트롤러
   export async function editRight(req, res) {
     const {employeeNumber, right} = req.body
-    console.log(right)
-    let user = await userRepository.findByEmployeeNumber(employeeNumber)
-    user.right = right
-    await userRepository.updateUserbyUser(user)
-    res.status(200).json({message:"권한이 수정 되었습니다"})
+    try {
+      let user = await userRepository.findByEmployeeNumber(employeeNumber)
+      user.right = right
+      await userRepository.updateUserbyUser(user)
+      res.status(200).json({message:"권한이 수정 되었습니다"})
+    } catch (error) {
+      return res.status(500).json({message:'서버에 에러가 생겼습니다 나중에 다시 시도 바랍니다'})
+    }
+
   }
 // 사번으로 이용자 정보 조회
   export async function getInfoByEmployeeNumber(req, res) {
-    const employeeNumber = req.params.employeeNumber
-    const user = await userRepository.findByEmployeeNumber(employeeNumber)
-    res.status(200).json(user)
+    try {
+      const employeeNumber = req.params.employeeNumber
+      const user = await userRepository.findByEmployeeNumber(employeeNumber)
+      return res.status(200).json(user)
+    } catch (error) {
+      return res.status(500).json({message:'서버에 에러가 생겼습니다 나중에 다시 시도 바랍니다'})
+    }
+
   }
 

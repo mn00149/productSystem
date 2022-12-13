@@ -4,27 +4,31 @@ import * as productRepository from '../models/Product.js';
 import * as categoryRepository from '../models/Category.js';
 import * as userRepository from '../models/User.js';
 import * as util from '../middleware/util.js'
-import { isNull } from 'util';
 
 // 물품 등록 처리 컨트롤러
 export async function register(req, res) {
-  const { mainCategory, subCategory, productName, returnAvailability, rentalAvailability, productCode, quantity } = req.body
-  const registerDate = util.getDate()
-  // 프런트단에서도 대분류 소분류 기본값주도록 필요시 설정
-  if (!mainCategory) { return res.status(401).json({ message: "Main Category reqiured" }) }
-  if (!subCategory) { return res.status(401).json({ message: "Sub Category reqiured" }) }
-  if (!productCode) { return res.status(401).json({ message: "물품번호를 입력 바랍니다" }) }
-  const category = { mainCategory, subCategory }
-  await categoryRepository.crateSubCategory(mainCategory, subCategory)
-  // body 값 숫자 제대로 받는 지 확인 할 것
-  const findProduct = await productRepository.findByProductCode(productCode)
-  if (findProduct) {
-    return res.status(409).json({ message: productCode + ` already exists` })
+  try {
+    const { mainCategory, subCategory, productName, returnAvailability, rentalAvailability, productCode, quantity } = req.body
+    const registerDate = util.getDate()
+    // 프런트단에서도 대분류 소분류 기본값주도록 필요시 설정
+    if (!mainCategory) { return res.status(401).json({ message: "Main Category reqiured" }) }
+    if (!subCategory) { return res.status(401).json({ message: "Sub Category reqiured" }) }
+    if (!productCode) { return res.status(401).json({ message: "물품번호를 입력 바랍니다" }) }
+    const category = { mainCategory, subCategory }
+    await categoryRepository.crateSubCategory(mainCategory, subCategory)
+    // body 값 숫자 제대로 받는 지 확인 할 것
+    const findProduct = await productRepository.findByProductCode(productCode)
+    if (findProduct) {
+      return res.status(409).json({ message: productCode + ` already exists` })
+    }
+    const newProduct = { productName, returnAvailability, rentalAvailability, productCode, quantity, category, registerDate }
+    await productRepository.createProduct(newProduct)
+  
+    res.status(201).json({ message: "물품등록 성공" });
+  } catch (error) {
+    res.status(500).json({message: '서버에 에러가 발생했습니다 잠시후 다시 시도 바랍니다'})
   }
-  const newProduct = { productName, returnAvailability, rentalAvailability, productCode, quantity, category, registerDate }
-  await productRepository.createProduct(newProduct)
 
-  res.status(201).json({ message: "물품등록 성공" });
 }
 
 // 엑셀로 물품 등록처리 컨트롤러
@@ -77,14 +81,20 @@ export async function registerByExcel(req, res) {
 
 // 전체물품 조회 처리 컨트롤러
 export async function getAll(req, res) {
-  const products = await productRepository.getAll()
-  if (!products) { return res.status(401).json({ message: '현제 등록된 물품이 없습니다' }) }
-  return res.status(201).json(products)
+  try {
+    const products = await productRepository.getAll()
+    if (!products) { return res.status(401).json({ message: '현제 등록된 물품이 없습니다' }) }
+    return res.status(201).json(products)
+  } catch (error) {
+    return res.status(500).json({ message: "에러가 발생했습니다 잠시후 다시 시도 부탁드립니다" })
+  }
+
 }
 
 // 엑셀로 물품 리스트 내보내기(엑셀 부분 따로 util로 뺄 수 있으면 뺄것!!)
 export async function ExportAllByExcel(req, res) {
-  const products = await productRepository.getAll()
+  try {
+    const products = await productRepository.getAll()
   const workbook = new ExcelJS.Workbook()
   const sheet = workbook.addWorksheet('')
   const excelData = []
@@ -111,7 +121,6 @@ export async function ExportAllByExcel(req, res) {
   sheet.addRows(excelData);
 
   const _filename = `C:/Users/mn001/Downloads/product_list${new Date().getTime()}.xlsx`;
-  try {
     await workbook.xlsx.writeFile(_filename);  // filename은 임시 파일이므로 어지간하면 겹치지않게 getTime
     res.setHeader("Content-disposition", "attachment; filename=ReviewComment.xlsx"); // 다운받아질 파일명 설정
     res.setHeader("Content-type", "application/vnd.ms-excel; charset=utf-8"); // 파일 형식 지정
@@ -131,8 +140,14 @@ export async function ExportAllByExcel(req, res) {
 // 물품 대여폼 레더링 처리 컨트롤러
 export async function rederRentalForm(req, res) {
   const productCode = req.params.productCode
-  const product = await productRepository.findByProductCode(productCode)
-  return res.render('rentalForm', { product })
+  try {
+    const product = await productRepository.findByProductCode(productCode)
+    return res.render('rentalForm', { product })
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ message: "에러가 발생했습니다 잠시후 다시 시도 부탁드립니다" })
+  }
+
 }
 
 // 물품 대여처리 컨트롤러
@@ -144,7 +159,8 @@ export async function rent(req, res) {
   if (isLending) {
     return res.status(409).json({ message: "이미 대여중 입니다, 반납후 대여 가능 합니다" })
   }
-  let product = await productRepository.findByProductCode(productCode)
+  try {
+    let product = await productRepository.findByProductCode(productCode)
   if (product.rentalAvailability == 0) { return res.status(409).json({ message: "대여가 불가능한 품목입니다" }) }
   const product_id = product._id.toHexString()
   if (product.returnAvailability == 1) {
@@ -179,119 +195,176 @@ export async function rent(req, res) {
   await userRepository.updateUserbyUser(user)
   await productRepository.updateByProduct(product)
   return res.status(200).json({ message: '대여 성공' })
+  } catch (error) {
+    return res.status(500).json({ message: '서버 에러가 발생했습니다. 잠시 후 다시 시도 바랍니다.' })
+  }
+  
 }
 
 //물품명으로 물품검색처리 컨트롤러
 export async function searchByProductName(req, res) {
-  const productName = req.params.productName
-  const products = await productRepository.getAll()
-  const searchProducts = products.filter((product) => product.productName.includes(productName))
-  return res.status(200).json(searchProducts)
+  try {
+    const productName = req.params.productName
+    const products = await productRepository.getAll()
+    const searchProducts = products.filter((product) => product.productName.includes(productName))
+    return res.status(200).json(searchProducts)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ message: "에러가 발생했습니다 잠시후 다시 시도 부탁드립니다" })
+  }
+
 }
 
 //사용자 이름으로 물품 검색
 export async function searchByUsername(req, res) {
-  const username = req.params.username
-  const products = await productRepository.getAll()
-  const searchProducts = products.map((product) => {
-    for (let i = 0; i < product.lended.length; i++) {
-      if (product.lended[i].username.includes(username) && !product.lended[i].returndate) return product
-    }
-  }).filter((product) => product)
-  return res.status(200).json(searchProducts)
+  try {
+    const username = req.params.username
+    const products = await productRepository.getAll()
+    const searchProducts = products.map((product) => {
+      for (let i = 0; i < product.lended.length; i++) {
+        if (product.lended[i].username.includes(username) && !product.lended[i].returndate) return product
+      }
+    }).filter((product) => product)
+    return res.status(200).json(searchProducts)
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ message: "에러가 발생했습니다 잠시후 다시 시도 부탁드립니다" })
+  }
 }
 
 // 대여자 목록 불러오기
 export async function getProductUserList(req, res) {
-  const productCode = req.params.productCode
-  const product = await productRepository.findByProductCode(productCode)
-  const lendedUsers = product.lended.filter((user) => !user.returndate)
-  if (!lendedUsers.length) return res.render('error/noContent')
-  return res.render('product/productUser', { lendedUsers })
+  try {
+    const productCode = req.params.productCode
+    const product = await productRepository.findByProductCode(productCode)
+    const lendedUsers = product.lended.filter((user) => !user.returndate)
+    if (!lendedUsers.length) return res.render('error/noContent')
+    return res.render('product/productUser', { lendedUsers })
+  } catch (error) {
+    console.log(500)
+    return res.render('error/serverError')
+  }
+
 }
 
 // 해당 물품의 모든 대여이력 불러오기
 export async function getRentalRecord(req, res) {
-  const productCode = req.params.productCode
-  const product = await productRepository.findByProductCode(productCode)
-  const lendedUsers = product.lended
-  if (!lendedUsers.length) return res.render('error/noContent')
-  return res.render('product/rentalRecord', { lendedUsers })
+  try {
+    const productCode = req.params.productCode
+    const product = await productRepository.findByProductCode(productCode)
+    const lendedUsers = product.lended
+    if (!lendedUsers.length) return res.render('error/noContent')
+    return res.render('product/rentalRecord', { lendedUsers })
+  } catch (error) {
+    console.log(500)
+    return res.render('error/serverError')
+  }
+
 }
 
 // 물품 반납처리 컨트롤러
 export async function returnProduct(req, res) {
-  const productCode = req.body.productCode
-  const returndate = util.getDate()
-  let user = req.user
-  let product = await productRepository.findByProductCode(productCode)
-  user.lending = user.lending.filter((lendingproduct) => lendingproduct.productCode != productCode)
-
-  const updateLended = product.lended.map((record) => {
-    //물품 여러개일 때 확인!!
-    if (!record.returndate && record.username == user.username) {
-      record.returndate = returndate
+  try {
+    const productCode = req.body.productCode
+    const returndate = util.getDate()
+    let user = req.user
+    let product = await productRepository.findByProductCode(productCode)
+    user.lending = user.lending.filter((lendingproduct) => lendingproduct.productCode != productCode)
+  
+    const updateLended = product.lended.map((record) => {
+      //물품 여러개일 때 확인!!
+      if (!record.returndate && record.username == user.username) {
+        record.returndate = returndate
+        return record
+      }
       return record
-    }
-    return record
-  })
+    })
+  
+    product.quantity += 1
+    product.rentalQuantity -= 1
+    product.lended = updateLended
+  
+    await productRepository.updateByProduct(product)
+    await userRepository.updateUserbyUser(user)
+    res.status(200).json({message: "반납을 성공했습니다"})
+  } catch (error) {
+    console.log(error)
+    res.status(500)
+    return res.status(500).json({ message: "에러가 발생했습니다 잠시후 다시 시도 부탁드립니다" })
+  }
 
-  product.quantity += 1
-  product.rentalQuantity -= 1
-  product.lended = updateLended
-
-  await productRepository.updateByProduct(product)
-  await userRepository.updateUserbyUser(user)
-  res.redirect('/users/status')
 }
 
 export async function renderEditForm(req, res) {
-  const productCode = req.params.productCode
-  const product = await productRepository.findByProductCode(productCode)
-  res.render('product/productEdit', { product })
+  try {
+    const productCode = req.params.productCode
+    const product = await productRepository.findByProductCode(productCode)
+    res.render('product/productEdit', { product })
+  } catch (error) {
+    console.log(error)
+    return res.render('error/serverError')
+  }
+
 }
 
 export async function edit(req, res) {
-  const { oproductCode, mainCategory, subCategory, productName, returnAvailability, rentalAvailability, productCode, quantity } = req.body
-
-  const registerDate = util.getDate()
-  // 프런트단에서도 대분류 소분류 기본값주도록 필요시 설정
-  if (!mainCategory) { return res.status(401).json({ message: "Main Category reqiured" }) }
-  if (!subCategory) { return res.status(401).json({ message: "Sub Category reqiured" }) }
-  const category = { mainCategory, subCategory }
-  const findMainCategory = await categoryRepository.findByMainCategory(mainCategory)
-
-  if (findMainCategory) {
-    await categoryRepository.crateSubCategory(mainCategory, subCategory)
-  } else {
-    await categoryRepository.createCategory(category)
+  try {
+    const { oproductCode, mainCategory, subCategory, productName, returnAvailability, rentalAvailability, productCode, quantity } = req.body
+    const registerDate = util.getDate()
+    // 프런트단에서도 대분류 소분류 기본값주도록 필요시 설정
+    if (!mainCategory) { return res.status(401).json({ message: "Main Category reqiured" }) }
+    if (!subCategory) { return res.status(401).json({ message: "Sub Category reqiured" }) }
+    const category = { mainCategory, subCategory }
+    const findMainCategory = await categoryRepository.findByMainCategory(mainCategory)
+  
+    if (findMainCategory) {
+      await categoryRepository.crateSubCategory(mainCategory, subCategory)
+    } else {
+      await categoryRepository.createCategory(category)
+    }
+    // body 값 숫자 제대로 받는 지 확인 할 것
+    const findProduct = await productRepository.findByProductCode(oproductCode)
+    const product_id = findProduct._id.toHexString()
+    if (!findProduct) {
+      return res.status(409).json({ message: `수정할 물품이 없습니다 관리자에게 문의 바랍니다` })
+    }
+    const updateProduct = { productName, returnAvailability, rentalAvailability, productCode, quantity, category, registerDate }
+    await productRepository.updateProduct(findProduct._id, updateProduct)
+    await userRepository.updateLendingByProduct_id(product_id, { mainCategory, subCategory, productCode, productName })
+    res.status(201).json({ message: "물품수정 성공" });
+  } catch (error) {
+    res.status(500).json({message:'에러가 발생했습니다 잠시후 다시 시도 바랍니다'})
   }
-  // body 값 숫자 제대로 받는 지 확인 할 것
-  const findProduct = await productRepository.findByProductCode(oproductCode)
-  const product_id = findProduct._id.toHexString()
-  if (!findProduct) {
-    return res.status(409).json({ message: `수정할 물품이 없습니다 관리자에게 문의 바랍니다` })
-  }
-  const updateProduct = { productName, returnAvailability, rentalAvailability, productCode, quantity, category, registerDate }
-  await productRepository.updateProduct(findProduct._id, updateProduct)
-  await userRepository.updateLendingByProduct_id(product_id, { mainCategory, subCategory, productCode, productName })
-  res.status(201).json({ message: "물품수정 성공" });
+
 }
 
-// 대여중인 물품 리스트 불러오기
+// 대여중인 물품 리스트 불러오기 및 해당 팝업 렌더링
 export async function getRentalList(req, res) {
-  const user = req.user
-  const products = await productRepository.getAllBeingRented()
-  const rentedProducts = products.map((product) => {
-    product.lended = product.lended.filter((record) => !record.returndate)
-    return product
-  })
-  res.render('product/rentalList', { rentedProducts, user })
+  try {
+    const user = req.user
+    const products = await productRepository.getAllBeingRented()
+    const rentedProducts = products.map((product) => {
+      product.lended = product.lended.filter((record) => !record.returndate)
+      return product
+    })
+    res.render('product/rentalList', { rentedProducts, user })
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({message:'에러가 발생했습니다 잠시후 다시 시도 바랍니다'})
+  }
+
 }
 
 // 물품 삭제처리
 export async function remove(req, res) {
-  const { productCode } = req.body
-  await productRepository.deleteByProductCode(productCode)
-  res.status(201).json({ message: '삭제되었습니다' });
+  try {
+    const { productCode } = req.body
+    await productRepository.deleteByProductCode(productCode)
+    res.status(201).json({ message: '삭제되었습니다' });
+  } 
+  catch (error) {
+    console.log(error)
+    return res.status(500).json({message:'에러가 발생했습니다 잠시후 다시 시도 바랍니다'})
+  }
+
 }

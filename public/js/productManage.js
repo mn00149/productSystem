@@ -285,6 +285,8 @@ $('#export-btn').click(() => {
          })
 })
 
+
+
 $(document).on("click", "#delete-btn", function () {
     const productCode =  $(this).val()
     Swal.fire({
@@ -322,6 +324,7 @@ $(document).on("click", "#delete-btn", function () {
 
 });
 
+// document가 ready에서 html을 동적으로 생성하기 때문에 document on으로 이벤트를 들어야 함
 $(document).on("click", "#rental-btn", function () {
     const retalFormPopup = window.open('/products/rentalForm/' + $(this).val(), 'rentalform popup', 'width=700px,height=800px,scrollbars=yes')
     retalFormPopup.addEventListener('beforeunload', function (e) {
@@ -332,7 +335,10 @@ $(document).on("click", "#rental-btn", function () {
     });
 });
 
-
+// --------------------------------------------POPUP뜨는 버튼들 모음-----------------------------------------------------
+$('#product-register').click(function(){
+    window.open('/products/register/popup', 'user-list form popup', 'width=700px,height=800px,scrollbars=yes')
+})
 
 $(document).on("click", "#user-list", function () {
     window.open('/products/usersInf/' + $(this).val(), 'user-list form popup', 'width=700px,height=800px,scrollbars=yes')
